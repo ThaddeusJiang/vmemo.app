@@ -11,6 +11,9 @@ config :vmemo, Vmemo.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :vmemo, typesense_url: "http://localhost:8765"
+config :vmemo, typesense_api_key: "xyz"
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

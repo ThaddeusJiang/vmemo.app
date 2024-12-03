@@ -45,3 +45,4 @@ assets/css/_components.css
 _data
 storage
 .DS_Store
+.elixir_ls

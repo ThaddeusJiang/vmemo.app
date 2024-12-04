@@ -34,7 +34,6 @@ jobs:
           - "8765:8108"
         env:
           TYPESENSE_API_KEY: xyz
-          TYPESENSE_DATA_DIR: /data
           TYPESENSE_ENABLE_CORS: "true"
         options: >-
           --health-cmd "curl -s -f http://localhost:8108/health"

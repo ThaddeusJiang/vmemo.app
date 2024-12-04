@@ -28,6 +28,17 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      typesense:
+        image: typesense/typesense:27.1
+        ports:
+          - "8765:8108"
+        options: >-
+          --data-dir /data --api-key=xyz --enable-cors
+          --health-cmd "curl -s -f http://localhost:8108/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     strategy:
       matrix:
         otp: ["27"]

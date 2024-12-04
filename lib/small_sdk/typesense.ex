@@ -151,6 +151,20 @@ defmodule SmallSdk.Typesense do
     end
   end
 
+  def handle_search_res(res) do
+    {:ok, data} = handle_response(res)
+    documents = data["hits"] |> Enum.map(&Map.get(&1, "document"))
+
+    {:ok, documents}
+  end
+
+  def handle_multi_search_res(res) do
+    {:ok, data} = handle_response(res)
+    documents = data["results"] |> hd() |> Map.get("hits") |> Enum.map(&Map.get(&1, "document"))
+
+    {:ok, documents}
+  end
+
   def build_request(path) do
     {url, api_key} = get_env()
 

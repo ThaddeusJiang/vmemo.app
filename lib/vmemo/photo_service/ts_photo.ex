@@ -22,7 +22,8 @@ defmodule Vmemo.PhotoService.TsPhoto do
     Typesense.update_document("photos", photo)
   end
 
-  def list_photos() do
+  def list_photos(opts \\ []) do
+    user_id = Keyword.get(opts, :user_id, "")
     req = Typesense.build_request("/collections/photos/documents/search")
 
     res =
@@ -31,20 +32,20 @@ defmodule Vmemo.PhotoService.TsPhoto do
           q: "",
           query_by: "note",
           exclude_fields: "image_embedding",
-          # TODO: inserted_by: "user_id",
-          # filter_by: "is_public:true",
+          filter_by: "inserted_by:#{user_id}",
           page: 1,
           per_page: 100,
           sort_by: "inserted_at:desc"
         ]
       )
 
-    {:ok, data} = Typesense.handle_response(res)
+    {:ok, photos} = Typesense.handle_search_res(res)
 
-    data["hits"] |> Enum.map(&Map.get(&1, "document")) || []
+    photos
   end
 
-  def list_similar_photos(id) do
+  def list_similar_photos(id, opts \\ []) do
+    user_id = Keyword.get(opts, :user_id, "")
     req = Typesense.build_request("/multi_search")
 
     res =
@@ -54,15 +55,17 @@ defmodule Vmemo.PhotoService.TsPhoto do
             %{
               "collection" => "photos",
               "q" => "*",
-              "vector_query" => "image_embedding:([], id:#{id})"
+              "vector_query" => "image_embedding:([], id:#{id})",
+              "filter_by" => "inserted_by:#{user_id}",
+              "exclude_fields" => "image_embedding"
             }
           ]
         }
       )
 
-    {:ok, data} = Typesense.handle_response(res)
+    {:ok, photos} = Typesense.handle_multi_search_res(res)
 
-    data["results"] |> hd() |> Map.get("hits") |> Enum.map(&Map.get(&1, "document"))
+    photos
   end
 
   def create_collection_photos_20241203() do

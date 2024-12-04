@@ -6,7 +6,8 @@ defmodule VmemoWeb.HomePageLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    photos = TsPhoto.list_photos()
+    user_id = socket.assigns.current_user.id
+    photos = TsPhoto.list_photos(user_id: user_id)
 
     Logger.debug("photos: #{inspect(photos)}")
 

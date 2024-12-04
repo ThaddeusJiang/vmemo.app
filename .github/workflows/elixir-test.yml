@@ -56,10 +56,6 @@ jobs:
             sleep 1
           done
 
-      - name: Set up Typesense
-        run: |
-          mix ts.setup
-
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
         with:
@@ -75,6 +71,11 @@ jobs:
             echo "Waiting for postgres..."
             sleep 1
           done
+
+      - name: Set up Typesense
+        run: |
+          mix ts.setup
+          sleep 5
 
       - name: Set up database
         env:

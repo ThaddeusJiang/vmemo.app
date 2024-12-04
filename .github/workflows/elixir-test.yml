@@ -80,7 +80,7 @@ jobs:
       - name: Set up Typesense
         run: |
           mix ts.setup
-          sleep 5
+          sleep 20
 
       - name: Run tests
         run: mix test

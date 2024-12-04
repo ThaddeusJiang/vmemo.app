@@ -13,7 +13,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    env:
+      MIX_ENV: test
     services:
       postgres:
         image: postgres:16
@@ -72,18 +73,14 @@ jobs:
             sleep 1
           done
 
+      - name: Set up database
+        run: |
+          mix ecto.setup
+
       - name: Set up Typesense
         run: |
           mix ts.setup
           sleep 5
 
-      - name: Set up database
-        env:
-          MIX_ENV: test
-        run: |
-          mix ecto.setup
-
       - name: Run tests
-        env:
-          MIX_ENV: test
         run: mix test

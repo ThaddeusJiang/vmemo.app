@@ -47,3 +47,4 @@ _local
 storage
 .DS_Store
 .elixir_ls
+docker-compose.test.yml

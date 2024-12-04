@@ -50,3 +50,4 @@ _local
 .github
 docs
 storage
+docker-compose.test.yml

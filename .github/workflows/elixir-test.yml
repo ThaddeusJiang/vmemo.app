@@ -69,8 +69,8 @@ jobs:
         env:
           MIX_ENV: test
         run: |
-          mix ecto.create
-          mix ecto.migrate
+          mix ecto.setup
+          mix ts.setup
 
       - name: Run tests
         env:

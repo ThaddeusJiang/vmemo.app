@@ -100,8 +100,12 @@ defmodule Vmemo.PhotoService.TsPhoto do
     Typesense.drop_collection(@collection_name)
   end
 
+  def setup() do
+    create_collection_photos_20241203()
+  end
+
   def reset() do
     drop_collection_photos()
-    create_collection_photos_20241203()
+    setup()
   end
 end

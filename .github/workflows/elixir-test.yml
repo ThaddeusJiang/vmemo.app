@@ -31,6 +31,17 @@ jobs:
       typesense:
         # ref: https://typesense.org/docs/guide/github-actions.html#option-2-without-dependencies
         image: typesense/typesense:27.1
+        ports:
+          - 8108:8108
+        env:
+          TYPESENSE_API_KEY: xyz
+          TYPESENSE_DATA_DIR: /data
+          TYPESENSE_ENABLE_CORS: "true"
+        options: >-
+          --health-cmd "curl -s http://localhost:8108/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     strategy:
       matrix:
@@ -65,15 +76,19 @@ jobs:
             sleep 1
           done
 
-      - name: Curl Typesense
-        run: sleep 1 && curl http://localhost:8108/health
-
       - name: Set up database
         env:
           MIX_ENV: test
         run: |
-          mix ecto.setup
           mix ts.setup
+          mix ecto.setup
+
+      - name: Wait for Typesense
+        run: |
+          until curl -s http://localhost:8108/health; do
+            echo "Waiting for typesense..."
+            sleep 1
+          done
 
       - name: Run tests
         env:

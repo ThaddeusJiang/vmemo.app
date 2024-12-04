@@ -5,6 +5,7 @@ defmodule VmemoWeb.FileController do
     file_path = Path.join(["storage/v1", user_id, "photos", filename])
 
     if File.exists?(file_path) do
+      conn = put_resp_content_type(conn, MIME.from_path(file_path))
       send_file(conn, 200, file_path)
     else
       conn

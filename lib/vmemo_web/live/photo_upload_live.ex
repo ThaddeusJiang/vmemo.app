@@ -57,7 +57,7 @@ defmodule VmemoWeb.PhotoUploadLive do
         {:noreply,
          socket
          |> put_flash(:info, "Photos uploaded successfully")
-         |> push_navigate(to: "/")}
+         |> push_navigate(to: "/photos")}
 
       _ ->
         {:noreply, socket}

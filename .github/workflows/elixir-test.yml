@@ -65,6 +65,9 @@ jobs:
             sleep 1
           done
 
+      - name: Curl Typesense
+        run: sleep 1 && curl http://localhost:8108/health
+
       - name: Set up database
         env:
           MIX_ENV: test

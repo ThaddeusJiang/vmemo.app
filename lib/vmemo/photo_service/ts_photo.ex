@@ -1,4 +1,11 @@
 defmodule Vmemo.PhotoService.TsPhoto do
+  @moduledoc """
+  A module to interact with the photo collection in Typesense.
+
+  CRUD and search operations are supported.
+  """
+
+  require Logger
   alias SmallSdk.Typesense
 
   @collection_name "photos"
@@ -7,22 +14,22 @@ defmodule Vmemo.PhotoService.TsPhoto do
     Typesense.create_document("photos", photo)
   end
 
-  def update_photo(photo) do
-    Typesense.update_document("photos", photo)
-  end
-
   def get_photo(photo_id) do
     Typesense.get_document("photos", photo_id)
   end
 
+  def update_photo(photo) do
+    Typesense.update_document("photos", photo)
+  end
+
   def list_photos() do
-    req = Typesense.build_request("/collections/photos/documents")
+    req = Typesense.build_request("/collections/photos/documents/search")
 
     res =
       Req.get(req,
         params: [
           q: "",
-          query_by: "caption",
+          query_by: "note",
           exclude_fields: "image_embedding",
           # TODO: inserted_by: "user_id",
           # filter_by: "is_public:true",
@@ -32,9 +39,9 @@ defmodule Vmemo.PhotoService.TsPhoto do
         ]
       )
 
-    data = Typesense.handle_response(res)
+    {:ok, data} = Typesense.handle_response(res)
 
-    data["hits"] |> Enum.map(&Map.get(&1, "document"))
+    data["hits"] |> Enum.map(&Map.get(&1, "document")) || []
   end
 
   def list_similar_photos(id) do
@@ -53,7 +60,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
         }
       )
 
-    data = Typesense.handle_response(res)
+    {:ok, data} = Typesense.handle_response(res)
 
     data["results"] |> hd() |> Map.get("hits") |> Enum.map(&Map.get(&1, "document"))
   end

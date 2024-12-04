@@ -57,12 +57,14 @@ defmodule SmallSdk.Typesense do
   def get_document(collection_name, document_id) do
     req = build_request("/collections/#{collection_name}/documents/#{document_id}")
     res = Req.get(req)
+
     handle_response(res)
   end
 
   def update_document(collection_name, document) do
     req = build_request("/collections/#{collection_name}/documents/#{document[:id]}")
     res = Req.patch(req, json: document)
+
     handle_response(res)
   end
 
@@ -97,7 +99,7 @@ defmodule SmallSdk.Typesense do
         }
       )
 
-    data = handle_response(res)
+    {:ok, data} = handle_response(res)
 
     %{
       url: url,
@@ -108,37 +110,34 @@ defmodule SmallSdk.Typesense do
   def handle_response({:ok, %{status: status, body: body}}) do
     case status do
       status when status in 200..209 ->
-        body
+        {:ok, body}
 
       400 ->
-        Logger.warning("Bad Request: #{inspect(body)}")
-        raise "Bad Request"
+        {:error, "Bad Request"}
 
       401 ->
         raise "Unauthorized"
 
       404 ->
-        nil
+        {:error, "Not Found"}
 
       409 ->
-        raise "Conflict"
+        {:error, "Conflict"}
 
       422 ->
-        raise "Unprocessable Entity"
+        {:error, "Unprocessable Entity"}
 
       503 ->
-        # TODO: service monitoring, alerting to IM
-        raise "Service Unavailable"
+        {:error, "Service Unavailable"}
 
       _ ->
         Logger.error("Unhandled status code #{status}: #{inspect(body)}")
-        raise "Unknown error: #{status}"
+        {:error, "Unhandled status code #{status}"}
     end
   end
 
-  def handle_response({:error, reason}) do
-    Logger.error("Request failed: #{inspect(reason)}")
-    raise "Request failed"
+  def handle_response({:error, _}) do
+    {:error, "Request failed"}
   end
 
   def handle_response!(%{status: status, body: body}) do

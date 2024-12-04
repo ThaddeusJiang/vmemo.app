@@ -5,6 +5,7 @@
   inputs: [
     # "*.{heex,ex,exs}",
     "{config,lib,test}/**/*.{heex,ex,exs}",
-    "priv/*/seeds.exs"
+    "priv/*/seeds.exs",
+    "_local/*.{ex,exs}"
   ]
 ]

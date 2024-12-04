@@ -14,5 +14,7 @@ defmodule SmallSdk.FileSystem do
     File.mkdir_p!(dest_dir)
 
     File.cp!(src, dest)
+
+    dest
   end
 end

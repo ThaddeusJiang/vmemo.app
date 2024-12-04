@@ -29,17 +29,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       typesense:
+        # ref: https://typesense.org/docs/guide/github-actions.html#option-2-without-dependencies
         image: typesense/typesense:27.1
-        ports:
-          - "8765:8108"
-        env:
-          TYPESENSE_API_KEY: xyz
-          TYPESENSE_ENABLE_CORS: "true"
-        options: >-
-          --health-cmd "curl -s -f http://localhost:8108/health"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     strategy:
       matrix:
@@ -47,6 +38,17 @@ jobs:
         elixir: ["1.17.3"]
     name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
     steps:
+      - name: Start Typesense
+        run: |
+          docker run -d \
+          -p 8108:8108 \
+          --name typesense \
+          -v /tmp/typesense:/data \
+          typesense/typesense:27.1 \
+          --api-key=xyz \
+          --data-dir /data \
+          --enable-cors
+
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
         with:

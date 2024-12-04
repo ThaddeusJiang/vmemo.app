@@ -49,6 +49,17 @@ jobs:
           --data-dir /data \
           --enable-cors
 
+      - name: Wait for Typesense
+        run: |
+          until curl -s http://localhost:8108/health; do
+            echo "Waiting for typesense..."
+            sleep 1
+          done
+
+      - name: Set up Typesense
+        run: |
+          mix ts.setup
+
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
         with:
@@ -69,15 +80,7 @@ jobs:
         env:
           MIX_ENV: test
         run: |
-          mix ts.setup
           mix ecto.setup
-
-      - name: Wait for Typesense
-        run: |
-          until curl -s http://localhost:8108/health; do
-            echo "Waiting for typesense..."
-            sleep 1
-          done
 
       - name: Run tests
         env:

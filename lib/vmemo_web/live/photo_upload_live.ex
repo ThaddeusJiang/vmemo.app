@@ -77,7 +77,7 @@ defmodule VmemoWeb.PhotoUploadLive do
         <label for={@uploads.photos.ref} class="relative h-auto">
           <section
             phx-drop-target={@uploads.photos.ref}
-            class=" aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 bg-gradient-to-b from-[#f4f8c2] to-[#a8e6cf] "
+            class=" aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 "
           >
             <div class="grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 ">
               <%= for {entry, index} <- Enum.with_index(@uploads.photos.entries, 1) do %>
@@ -99,7 +99,7 @@ defmodule VmemoWeb.PhotoUploadLive do
             </div>
 
             <.live_file_input upload={@uploads.photos} class="hidden" />
-            <label class="block text-green-600 py-[2px] rounded-full place-content-center ">
+            <label class="block py-[2px] rounded-full place-content-center ">
               Drop media to reorder
             </label>
           </section>

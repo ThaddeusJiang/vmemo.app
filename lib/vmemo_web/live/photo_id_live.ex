@@ -1,4 +1,5 @@
 defmodule VmemoWeb.PhotoIdLive do
+  require Logger
   use VmemoWeb, :live_view
 
   alias Vmemo.PhotoService.TsPhoto
@@ -9,7 +10,15 @@ defmodule VmemoWeb.PhotoIdLive do
     {:ok, photo} = TsPhoto.get_photo(id)
     photos = TsPhoto.list_similar_photos(photo["id"], user_id: user_id)
 
-    socket = socket |> assign(photo: photo, photos: photos)
+    socket =
+      socket
+      |> assign(photo: photo)
+      |> assign(photos: photos)
+      |> assign_new(:note_form, fn ->
+        to_form(%{
+          "note" => photo["note"]
+        })
+      end)
 
     {:ok, socket}
   end
@@ -26,6 +35,20 @@ defmodule VmemoWeb.PhotoIdLive do
             class="w-full h-auto object-cover rounded shadow"
           />
         </div>
+
+        <.form class="w-full h-full flex flex-col gap-4 " for={@note_form} phx-submit="update_note">
+          <textarea
+            id={@note_form[:note].id}
+            name={@note_form[:note].name}
+            class="w-full h-24 p-2 text-lg border border-gray-300 rounded shadow"
+          ><%= Phoenix.HTML.Form.normalize_value("textarea", @note_form[:note].value) %></textarea>
+          <button
+            type="submit"
+            class="w-full p-2 text-lg font-semibold text-white bg-blue-500 rounded shadow"
+          >
+            Update note
+          </button>
+        </.form>
       </div>
 
       <div class="container">
@@ -48,5 +71,12 @@ defmodule VmemoWeb.PhotoIdLive do
       </div>
     </div>
     """
+  end
+
+  @impl true
+  def handle_event("update_note", %{"note" => note}, socket) do
+    {:ok, _} = TsPhoto.update_note(socket.assigns.photo["id"], note)
+
+    {:noreply, socket}
   end
 end

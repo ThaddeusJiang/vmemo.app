@@ -61,6 +61,11 @@ defmodule SmallSdk.Typesense do
     handle_response(res)
   end
 
+  @doc """
+  Typesense supports partial updates, so you can update only the fields you need to change.
+
+  docs: https://typesense.org/docs/27.1/api/documents.html#update-a-single-document
+  """
   def update_document(collection_name, document) do
     req = build_request("/collections/#{collection_name}/documents/#{document[:id]}")
     res = Req.patch(req, json: document)
@@ -113,6 +118,7 @@ defmodule SmallSdk.Typesense do
         {:ok, body}
 
       400 ->
+        Logger.warning("Bad Request: #{inspect(body)}")
         {:error, "Bad Request"}
 
       401 ->

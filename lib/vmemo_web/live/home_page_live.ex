@@ -9,12 +9,23 @@ defmodule VmemoWeb.HomePageLive do
     user_id = socket.assigns.current_user.id
     photos = TsPhoto.list_photos(user_id: user_id)
 
-    socket = assign(socket, photos: photos)
+    socket =
+      socket
+      |> assign(photos: photos)
+      |> assign(q: "")
 
     {:ok, socket}
   end
 
-  @spec split_list(any(), any()) :: list()
+  @impl true
+  def handle_params(params, _uri, socket) do
+    user_id = socket.assigns.current_user.id
+    q = Map.get(params, "q", "")
+    photos = TsPhoto.hybird_search_photos(q, user_id: user_id)
+
+    {:noreply, assign(socket, photos: photos, q: q)}
+  end
+
   def split_list(list, n) do
     Enum.with_index(list)
     |> Enum.group_by(fn {_elem, index} -> rem(index, n) end)
@@ -24,7 +35,19 @@ defmodule VmemoWeb.HomePageLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="container">
+    <div class="container flex flex-col gap-8">
+      <%!-- search box --%>
+      <form action="/home" method="get">
+        <input
+          type="search"
+          name="q"
+          class="border border-zinc-200 rounded-lg px-2 py-1 text-zinc-900"
+          placeholder="Search"
+          value={@q}
+        />
+        <%!-- search when typing --%>
+      </form>
+
       <div class="grid grid-cols-4 gap-4">
         <%= for photos  <- @photos |> split_list(4)  do %>
           <div class="space-y-4">

@@ -20,7 +20,7 @@ defmodule VmemoWeb.Router do
   scope "/", VmemoWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", PageController, :landing
 
     live "/hello", HelloLive
   end

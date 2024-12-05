@@ -11,15 +11,22 @@ defmodule Vmemo.PhotoService.TsPhoto do
   @collection_name "photos"
 
   def create_photo(photo) do
-    Typesense.create_document("photos", photo)
+    Typesense.create_document(@collection_name, photo)
   end
 
-  def get_photo(photo_id) do
-    Typesense.get_document("photos", photo_id)
+  def get_photo(id) do
+    Typesense.get_document(@collection_name, id)
   end
 
   def update_photo(photo) do
-    Typesense.update_document("photos", photo)
+    Typesense.update_document(@collection_name, photo)
+  end
+
+  def update_note(id, note) do
+    update_photo(%{
+      id: id,
+      note: note
+    })
   end
 
   def list_photos(opts \\ []) do
@@ -40,6 +47,31 @@ defmodule Vmemo.PhotoService.TsPhoto do
       )
 
     {:ok, photos} = Typesense.handle_search_res(res)
+
+    photos
+  end
+
+  def hybird_search_photos(q, opts \\ []) do
+    user_id = Keyword.get(opts, :user_id, "")
+    req = Typesense.build_request("/multi_search")
+
+    res =
+      Req.post(req,
+        json: %{
+          "searches" => [
+            %{
+              "query_by" => "note, image_embedding",
+              "q" => q,
+              "collection" => "photos",
+              "prefix" => "false",
+              "filter_by" => "inserted_by:#{user_id}",
+              "exclude_fields" => "image_embedding"
+            }
+          ]
+        }
+      )
+
+    {:ok, photos} = Typesense.handle_multi_search_res(res)
 
     photos
   end

@@ -71,13 +71,13 @@ defmodule VmemoWeb.PhotoUploadLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="container h-full sapce-y-6">
-      <form id="upload-form" phx-submit="save" phx-change="validate" class="h-full sm:h-5/6">
+    <div class="w-full h-full flex justify-center items-center">
+      <form id="upload-form" phx-submit="save" phx-change="validate" class="container h-auto min-h-80">
         <%!-- use phx-drop-target with the upload ref to enable file drag and drop --%>
-        <label for={@uploads.photos.ref}>
+        <label for={@uploads.photos.ref} class="relative h-auto">
           <section
             phx-drop-target={@uploads.photos.ref}
-            class="h-full  aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 bg-gradient-to-b from-[#f4f8c2] to-[#a8e6cf] "
+            class=" aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 bg-gradient-to-b from-[#f4f8c2] to-[#a8e6cf] "
           >
             <div class="grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 ">
               <%= for {entry, index} <- Enum.with_index(@uploads.photos.entries, 1) do %>

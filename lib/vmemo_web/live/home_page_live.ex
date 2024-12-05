@@ -9,8 +9,6 @@ defmodule VmemoWeb.HomePageLive do
     user_id = socket.assigns.current_user.id
     photos = TsPhoto.list_photos(user_id: user_id)
 
-    Logger.debug("photos: #{inspect(photos)}")
-
     socket = assign(socket, photos: photos)
 
     {:ok, socket}

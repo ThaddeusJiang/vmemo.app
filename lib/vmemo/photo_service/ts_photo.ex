@@ -101,7 +101,8 @@ defmodule Vmemo.PhotoService.TsPhoto do
   end
 
   def setup() do
-    create_collection_photos_20241203()
+    res = create_collection_photos_20241203()
+    Logger.info("Collection created: #{inspect(res)}")
   end
 
   def reset() do

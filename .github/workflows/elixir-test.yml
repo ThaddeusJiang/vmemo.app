@@ -66,11 +66,12 @@ jobs:
             sleep 1
           done
 
-      - name: Set up Typesense
+      - name: Reset Typesense
         run: |
           mix ts.reset
-          sleep 20s
-          echo "waiting for reset typesense test server"
+
+      - name: Sleep for Typesense to reset
+        run: sleep 20
 
       - name: Run tests
         run: |

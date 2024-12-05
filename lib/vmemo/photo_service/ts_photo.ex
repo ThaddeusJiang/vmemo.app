@@ -65,7 +65,9 @@ defmodule Vmemo.PhotoService.TsPhoto do
               "collection" => "photos",
               "prefix" => "false",
               "filter_by" => "inserted_by:#{user_id}",
-              "exclude_fields" => "image_embedding"
+              "exclude_fields" => "image_embedding",
+              "page" => 1,
+              "per_page" => 100
             }
           ]
         }

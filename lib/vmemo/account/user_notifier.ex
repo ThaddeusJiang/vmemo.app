@@ -9,7 +9,7 @@ defmodule Vmemo.Account.UserNotifier do
       new()
       |> to(recipient)
       # TODO: get_env
-      |> from({"Vmemo", "contact@dev.vmemo.app"})
+      |> from({"Vmemo", "contact@vmemo.app"})
       |> subject(subject)
       |> text_body(body)
 

@@ -20,7 +20,8 @@ defmodule VmemoWeb.Router do
   scope "/", VmemoWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", PageController, :landing
+
     live "/hello", HelloLive
   end
 
@@ -67,6 +68,13 @@ defmodule VmemoWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{VmemoWeb.UserAuth, :ensure_authenticated}] do
+      live "/home", HomePageLive, :index
+      live "/photos", HomePageLive, :index
+      live "/photos/:id", PhotoIdLive
+      # live "/home/upload", HomePageLive, :upload
+
+      live "/upload", PhotoUploadLive
+
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
@@ -82,5 +90,11 @@ defmodule VmemoWeb.Router do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
+  end
+
+  scope "/storage/v1/", VmemoWeb do
+    pipe_through :browser
+
+    get "/:user_id/photos/:filename", FileController, :show
   end
 end

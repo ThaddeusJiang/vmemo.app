@@ -8,6 +8,7 @@ defmodule Vmemo.Account.User do
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
+    field :display_name, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -101,6 +102,12 @@ defmodule Vmemo.Account.User do
       %{changes: %{email: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :email, "did not change")
     end
+  end
+
+  def display_name_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:display_name])
+    |> validate_length(:display_name, min: 2, max: 160)
   end
 
   @doc """

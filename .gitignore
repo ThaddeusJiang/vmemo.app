@@ -43,5 +43,8 @@ assets/css/_components.css
 
 # my personal docs
 _data
+_local
 storage
 .DS_Store
+.elixir_ls
+docker-compose.test.yml

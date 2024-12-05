@@ -1,21 +1,4 @@
 services:
-  # local build test
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:4000"
-  #   depends_on:
-  #     - postgres
-  #   environment:
-  #     SECRET_KEY_BASE: lmGy2/Mxu10pQYoMKqFGejS2B7a4vfWy/Kr5Uumo5s54BdQLg9yE3wZD5dgzfnOP
-  #     DATABASE_URL: postgresql://postgres:postgres@postgres:5432/vmemo_prod
-  #     PHX_HOST: app.vmemo.orb.local
-  #     PORT: 8080
-  #   env_file:
-  #     - .env
-
   postgres:
     image: postgres:16
     restart: on-failure

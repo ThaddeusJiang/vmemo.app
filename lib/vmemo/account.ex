@@ -2,6 +2,7 @@ defmodule Vmemo.Account do
   @moduledoc """
   The Account context.
   """
+  require Logger
 
   import Ecto.Query, warn: false
   alias Vmemo.Repo
@@ -108,6 +109,10 @@ defmodule Vmemo.Account do
     User.email_changeset(user, attrs, validate_email: false)
   end
 
+  def change_display_name(user, attrs \\ %{}) do
+    User.display_name_changeset(user, attrs)
+  end
+
   @doc """
   Emulates that the email will change without actually changing
   it in the database.
@@ -144,6 +149,12 @@ defmodule Vmemo.Account do
     else
       _ -> :error
     end
+  end
+
+  def update_user_display_name(user, attrs) do
+    user
+    |> User.display_name_changeset(attrs)
+    |> Repo.update()
   end
 
   defp user_email_multi(user, email, context) do

@@ -4,7 +4,8 @@
   plugins: [Phoenix.LiveView.HTMLFormatter, Surface.Formatter.Plugin],
   inputs: [
     "*.{heex,ex,exs}",
-    "{config,lib,test}/**/*.{heex,ex,exs,sface}",
-    "priv/*/seeds.exs"
+    "{config,lib,test}/**/*.{heex,ex,exs}",
+    "priv/*/seeds.exs",
+    "_local/*.{ex,exs}"
   ]
 ]

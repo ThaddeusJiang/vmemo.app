@@ -12,6 +12,20 @@ defmodule VmemoWeb.UserSettingsLive do
 
     <div class="space-y-12 divide-y">
       <div>
+        <%!-- change display_name --%>
+        <.simple_form
+          for={@display_name_form}
+          id="display_name_form"
+          phx-submit="update_dispaly_name"
+          phx-change="validate_display_name"
+        >
+          <.input field={@display_name_form[:display_name]} label="Display Name" />
+          <:actions>
+            <.button phx-disable-with="Changing...">Change</.button>
+          </:actions>
+        </.simple_form>
+      </div>
+      <div>
         <.simple_form
           for={@email_form}
           id="email_form"
@@ -90,6 +104,7 @@ defmodule VmemoWeb.UserSettingsLive do
     user = socket.assigns.current_user
     email_changeset = Account.change_user_email(user)
     password_changeset = Account.change_user_password(user)
+    display_name_changeset = Account.change_display_name(user)
 
     socket =
       socket
@@ -98,6 +113,7 @@ defmodule VmemoWeb.UserSettingsLive do
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
+      |> assign(:display_name_form, to_form(display_name_changeset))
       |> assign(:trigger_submit, false)
 
     {:ok, socket}
@@ -162,6 +178,37 @@ defmodule VmemoWeb.UserSettingsLive do
 
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
+    end
+  end
+
+  # validate display_name
+  def handle_event("validate_display_name", params, socket) do
+    display_name_form =
+      socket.assigns.current_user
+      |> Account.change_display_name(params["user"])
+      |> Map.put(:action, :validate)
+      |> to_form()
+
+    {:noreply, assign(socket, display_name_form: display_name_form)}
+  end
+
+  # update display_name
+  def handle_event("update_dispaly_name", params, socket) do
+    user = socket.assigns.current_user
+
+    case Account.update_user_display_name(user, params["user"]) do
+      {:ok, _} ->
+        display_name_form =
+          user
+          |> Account.change_display_name(params["user"])
+          |> to_form()
+
+        socket = socket |> put_flash(:info, "Display name changed successfully.")
+
+        {:noreply, assign(socket, display_name_form: display_name_form)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, display_name_form: to_form(changeset))}
     end
   end
 end

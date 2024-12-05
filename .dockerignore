@@ -46,6 +46,8 @@ erl_crash.dump
 
 #
 _data
+_local
 .github
 docs
 storage
+docker-compose.test.yml

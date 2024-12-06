@@ -116,7 +116,7 @@ spec:
           icon: https://i.gyazo.com/54a25cd93911174e573519c60d354880.png
           spec:
             source:
-                image: thaddeusjiang/vmemo:0.0.1-init
+                image: thaddeusjiang/vmemo:latest
             ports:
                 - id: web
                   port: 4000
@@ -140,7 +140,7 @@ spec:
                     default: ${TYPESENSE_API_KEY}
                     expose: false
                 PHX_HOST:
-                    default: ${PUBLIC_DOMAIN}
+                    default: ${ZEABUR_WEB_DOMAIN}
                     expose: false
                 SECRET_KEY_BASE:
                   expose: false

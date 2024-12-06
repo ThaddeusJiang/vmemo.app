@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "*"
+    branches:
+      - main # tag is latest
 
 jobs:
   build:
@@ -28,6 +30,15 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/vmemo:${{ github.ref_name }}
+
+        # main branch is :latest
+      - name: Publish :latest image
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/vmemo:latest
 
       - name: Log out from Docker Hub
         run: docker logout

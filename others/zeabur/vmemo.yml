@@ -2,7 +2,7 @@
 apiVersion: zeabur.com/v1
 kind: Template
 metadata:
-    name: Vmemo (WIP)
+    name: Vmemo
 spec:
     description: Record your life with impactful visuals, not plain, forgettable text.
     icon: https://i.gyazo.com/54a25cd93911174e573519c60d354880.png

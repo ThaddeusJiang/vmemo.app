@@ -1,0 +1,101 @@
+# yaml-language-server: $schema=https://schema.zeabur.app/template.json
+apiVersion: zeabur.com/v1
+kind: Template
+metadata:
+  name: Vmemo
+spec:
+  description: Helps you to save and search what you truly saw.
+  icon: https://i.gyazo.com/54a25cd93911174e573519c60d354880.png
+  tags:
+    - Visual Memory
+    - Photos Storage
+    - Search Engine
+  coverImage:
+
+  readme: |-
+    # Vmemo
+    Your personal visual memory app that helps you to save and search what you truly saw.
+
+    ## Features
+    - Capture what you see
+    - Search what you saw
+    - Your personal visual memory
+
+    [more](https://github.com/ThaddeusJiang/Vmemo)
+
+  services:
+    - name: Vmemo
+      icon: https://i.gyazo.com/54a25cd93911174e573519c60d354880.png
+      template: GIT
+      spec:
+        source:
+          source: GITHUB
+          repo: 831394769
+          branch: main
+          rootDirectory: /
+        volumes:
+          - id: bot-data
+            dir: /data
+        env:
+          TELEGRAM_BOT_TOKEN:
+            default: ""
+            expose: false
+          COBALT_API_URL:
+            default: http://cobalt-api.zeabur.internal:9000
+            expose: false
+          TYPESENSE_URL:
+            default: http://typesense.zeabur.internal:8108
+            expose: false
+          TYPESENSE_API_KEY:
+            default: ${TYPESENSE_API_KEY}
+            expose: false
+          GOOGLE_OAUTH_CLIENT_ID:
+            default: ""
+            expose: false
+          GOOGLE_OAUTH_CLIENT_SECRET:
+            default: ""
+            expose: false
+        configs: []
+    - name: typesense
+      icon: https://typesense.org/docs/images/typesense_logo.svg
+      template: PREBUILT_V2
+      spec:
+        source:
+          image: typesense/typesense:27.1
+        ports:
+          - id: web
+            port: 8108
+            type: HTTP
+        volumes:
+          - id: typesense-data
+            dir: /data
+        instructions:
+          - type: PASSWORD
+            title: Typesense API Key
+            content: ${TYPESENSE_API_KEY}
+            category: Credentials
+        env:
+          TYPESENSE_API_KEY:
+            default: ${PASSWORD}
+            expose: true
+          TYPESENSE_DATA_DIR:
+            default: /data
+            expose: false
+
+        configs: []
+    - name: cobalt-api
+      icon: https://github.com/imputnet/cobalt/raw/main/web/static/favicon.png
+      template: PREBUILT_V2
+      spec:
+        source:
+          image: ghcr.io/imputnet/cobalt:10
+        ports:
+          - id: api
+            port: 9000
+            type: TCP
+        env:
+          API_URL:
+            default: undefined
+            expose: false
+
+        configs: []

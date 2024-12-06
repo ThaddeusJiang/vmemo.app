@@ -113,9 +113,10 @@ spec:
         - name: Vmemo
           domainKey: PUBLIC_DOMAIN
           template: PREBUILT_V2
+          icon: https://i.gyazo.com/54a25cd93911174e573519c60d354880.png
           spec:
             source:
-                image: thaddeusjiang/vmemo
+                image: thaddeusjiang/vmemo:0.0.1-init
             ports:
                 - id: web
                   port: 4000

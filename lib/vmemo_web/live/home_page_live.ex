@@ -58,9 +58,9 @@ defmodule VmemoWeb.HomePageLive do
         <%= if @window_width > 0 do %>
           <%= cond do %>
             <% @window_width >= 768 -> %>
-              <div class="grid grid-cols-4 gap-4">
+              <div class="grid grid-cols-4 gap-2">
                 <%= for photos  <- @photos |> split_list(4)  do %>
-                  <div class="space-y-4">
+                  <div class="space-y-2">
                     <%= for photo  <- photos do %>
                       <.link navigate={~p"/photos/#{photo["id"]}"} class="link link-hover block">
                         <img
@@ -74,9 +74,9 @@ defmodule VmemoWeb.HomePageLive do
                 <% end %>
               </div>
             <% @window_width >= 640 -> %>
-              <div class="grid grid-cols-3 gap-4">
+              <div class="grid grid-cols-3 gap-2">
                 <%= for photos  <- @photos |> split_list(3)  do %>
-                  <div class="space-y-4">
+                  <div class="space-y-2">
                     <%= for photo  <- photos do %>
                       <.link navigate={~p"/photos/#{photo["id"]}"} class="link link-hover block">
                         <img
@@ -90,9 +90,9 @@ defmodule VmemoWeb.HomePageLive do
                 <% end %>
               </div>
             <% true -> %>
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-2 gap-2">
                 <%= for photos  <- @photos |> split_list(2)  do %>
-                  <div class="space-y-4">
+                  <div class="space-y-2">
                     <%= for photo  <- photos do %>
                       <.link navigate={~p"/photos/#{photo["id"]}"} class="link link-hover block">
                         <img

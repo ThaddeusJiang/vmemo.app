@@ -83,17 +83,33 @@ defmodule VmemoWeb.PhotoUploadLive do
               <%= for {entry, index} <- Enum.with_index(@uploads.photos.entries, 1) do %>
                 <article class="upload-entry relative">
                   <figure>
-                    <.live_img_preview entry={entry} class="h-auto w-full object-cover rounded" />
+                    <.live_img_preview
+                      entry={entry}
+                      class={"h-auto w-full object-cover rounded"
+                      <> if entry.progress > 0 and entry.progress < 100, do: "opacity-50" , else: ""}
+                    />
                   </figure>
-                  <button
-                    type="button"
-                    phx-click="cancel-upload"
-                    phx-value-ref={entry.ref}
-                    aria-label="cancel"
-                    class="absolute top-2 right-1 text-white bg-blue-500 rounded-full w-6 h-6 flex items-center justify-center"
-                  >
-                    <%= index %>
-                  </button>
+                  <%= if entry.progress == 0 do %>
+                    <button
+                      type="button"
+                      phx-click="cancel-upload"
+                      phx-value-ref={entry.ref}
+                      aria-label="cancel"
+                      class="absolute top-2 right-1 text-white bg-blue-500 rounded-full w-6 h-6 flex items-center justify-center"
+                    >
+                      <%= index %>
+                    </button>
+                  <% else %>
+                    <div class="absolute inset-0  flex justify-center items-center">
+                      <div
+                        class=" radial-progress text-white dark:text-black"
+                        style={"--value:#{entry.progress}; --size:2rem; --thickness: 2px;"}
+                        role="progressbar"
+                      >
+                        <span class="sr-only">Uploading...</span>
+                      </div>
+                    </div>
+                  <% end %>
                 </article>
               <% end %>
             </div>

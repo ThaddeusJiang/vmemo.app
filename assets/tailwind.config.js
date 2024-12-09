@@ -20,21 +20,51 @@ module.exports = {
       }
     },
   },
+  daisyui: {
+    themes: [
+      {
+        base: {
+          "color-scheme": "light",
+          primary: "#0f172a", // 主色
+          "primary-content": "#ffffff", // 主色文本
+          secondary: "#24292e", // GitHub 灰黑
+          accent: "#6f42c1", // 紫色
+          neutral: "#586069", // 中性色
+          "base-100": "#ffffff", // 背景色
+          "base-200": "#f6f8fa", // 辅助背景色
+          "base-300": "#e1e4e8", // 边框色
+          "base-content": "#24292e", // 文字颜色
+          info: "#0366d6", // 信息色（GitHub蓝）
+          success: "#28a745", // 成功色
+          warning: "#d73a49", // 警告色
+          error: "#cb2431", // 错误色
+          "--rounded-box": "0.75rem", // 圆角盒子
+          "--rounded-btn": "0.75rem", // 按钮圆角
+          "--rounded-badge": "0.75rem", // 徽章圆角
+          "--tab-radius": "0.5rem", // 选项卡圆角
+          "--btn-focus-scale": "0.95", // scale transform of button when you focus on it FIXME: not working, ref: https://daisyui.com/docs/utilities/
+        },
+      },
+    ],
+  },
   plugins: [
     require("@tailwindcss/forms"),
+    require("@tailwindcss/typography"),
+    require("tailwindcss-animate"),
+    require("daisyui"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //
     //     <div class="phx-click-loading:animate-ping">
     //
-    plugin(({addVariant}) => addVariant("phx-click-loading", [".phx-click-loading&", ".phx-click-loading &"])),
-    plugin(({addVariant}) => addVariant("phx-submit-loading", [".phx-submit-loading&", ".phx-submit-loading &"])),
-    plugin(({addVariant}) => addVariant("phx-change-loading", [".phx-change-loading&", ".phx-change-loading &"])),
+    plugin(({ addVariant }) => addVariant("phx-click-loading", [".phx-click-loading&", ".phx-click-loading &"])),
+    plugin(({ addVariant }) => addVariant("phx-submit-loading", [".phx-submit-loading&", ".phx-submit-loading &"])),
+    plugin(({ addVariant }) => addVariant("phx-change-loading", [".phx-change-loading&", ".phx-change-loading &"])),
 
     // Embeds Heroicons (https://heroicons.com) into your app.css bundle
     // See your `CoreComponents.icon/1` for more information.
     //
-    plugin(function({matchComponents, theme}) {
+    plugin(function ({ matchComponents, theme }) {
       let iconsDir = path.join(__dirname, "../deps/heroicons/optimized")
       let values = {}
       let icons = [
@@ -46,11 +76,11 @@ module.exports = {
       icons.forEach(([suffix, dir]) => {
         fs.readdirSync(path.join(iconsDir, dir)).forEach(file => {
           let name = path.basename(file, ".svg") + suffix
-          values[name] = {name, fullPath: path.join(iconsDir, dir, file)}
+          values[name] = { name, fullPath: path.join(iconsDir, dir, file) }
         })
       })
       matchComponents({
-        "hero": ({name, fullPath}) => {
+        "hero": ({ name, fullPath }) => {
           let content = fs.readFileSync(fullPath).toString().replace(/\r?\n|\r/g, "")
           let size = theme("spacing.6")
           if (name.endsWith("-mini")) {
@@ -70,7 +100,7 @@ module.exports = {
             "height": size
           }
         }
-      }, {values})
+      }, { values })
     })
   ]
 }

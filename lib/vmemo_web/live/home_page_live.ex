@@ -7,15 +7,38 @@ defmodule VmemoWeb.HomePageLive do
   @impl true
   def mount(_params, _session, socket) do
     user_id = socket.assigns.current_user.id
-    photos = TsPhoto.hybird_search_photos("", user_id: user_id)
 
     socket =
       socket
-      |> assign(photos: photos)
+      |> stream(:photos, load_photos("", 1, user_id))
+      |> assign(:page, 1)
       |> assign(q: "")
       |> assign(:window_width, 0)
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("load-more", %{"page" => page}, socket) do
+    user_id = socket.assigns.current_user.id
+    q = socket.assigns.q
+
+    socket =
+      socket
+      |> stream(:photos, load_photos(q, page, user_id))
+      |> assign(page: page + 1)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("window_resize", %{"width" => width}, socket) do
+    {:noreply, assign(socket, window_width: width)}
+  end
+
+  defp load_photos(q, page, user_id) do
+    TsPhoto.hybird_search_photos(q, user_id: user_id, page: page)
+    |> Enum.map(&TsPhoto.parse/1)
   end
 
   @impl true
@@ -28,14 +51,9 @@ defmodule VmemoWeb.HomePageLive do
   end
 
   def split_list(list, n) do
-    Enum.with_index(list)
+    list
     |> Enum.group_by(fn {_elem, index} -> rem(index, n) end)
     |> Enum.map(fn {_key, group} -> Enum.map(group, &elem(&1, 0)) end)
-  end
-
-  @impl true
-  def handle_event("window_resize", %{"width" => width}, socket) do
-    {:noreply, assign(socket, window_width: width)}
   end
 
   @impl true
@@ -54,60 +72,19 @@ defmodule VmemoWeb.HomePageLive do
         <%!-- search when typing --%>
       </form>
 
-      <div id="photos" phx-hook="Resize">
-        <%= if @window_width > 0 do %>
-          <%= cond do %>
-            <% @window_width >= 768 -> %>
-              <div class="grid grid-cols-4 gap-2">
-                <%= for photos  <- @photos |> split_list(4)  do %>
-                  <div class="space-y-2">
-                    <%= for photo  <- photos do %>
-                      <.link navigate={~p"/photos/#{photo["id"]}"} class="link link-hover block">
-                        <img
-                          src={photo["url"]}
-                          alt={photo["caption"]}
-                          class="w-full h-auto object-cover rounded shadow"
-                        />
-                      </.link>
-                    <% end %>
-                  </div>
-                <% end %>
-              </div>
-            <% @window_width >= 640 -> %>
-              <div class="grid grid-cols-3 gap-2">
-                <%= for photos  <- @photos |> split_list(3)  do %>
-                  <div class="space-y-2">
-                    <%= for photo  <- photos do %>
-                      <.link navigate={~p"/photos/#{photo["id"]}"} class="link link-hover block">
-                        <img
-                          src={photo["url"]}
-                          alt={photo["caption"]}
-                          class="w-full h-auto object-cover rounded shadow"
-                        />
-                      </.link>
-                    <% end %>
-                  </div>
-                <% end %>
-              </div>
-            <% true -> %>
-              <div class="grid grid-cols-2 gap-2">
-                <%= for photos  <- @photos |> split_list(2)  do %>
-                  <div class="space-y-2">
-                    <%= for photo  <- photos do %>
-                      <.link navigate={~p"/photos/#{photo["id"]}"} class="link link-hover block">
-                        <img
-                          src={photo["url"]}
-                          alt={photo["caption"]}
-                          class="w-full h-auto object-cover rounded shadow"
-                        />
-                      </.link>
-                    <% end %>
-                  </div>
-                <% end %>
-              </div>
-          <% end %>
-        <% end %>
+      <div id="photos" phx-update="stream" class="space-y-4">
+        <div id="phtos-empty" class="only:block hidden">
+          <div>No photos found</div>
+        </div>
+        <div :for={{dom_id, photo} <- @streams.photos} id={dom_id} class="space-y-2">
+          <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
+            <img src={photo.url} alt={photo.note} class="w-full h-auto object-cover rounded shadow" />
+          </.link>
+        </div>
       </div>
+
+      <%!-- TODO: don't need data-page , don't need passs params to client --%>
+      <div id="loader" phx-hook="InfiniteScroll" data-page={@page} id="infinite-scroll-marker"></div>
     </div>
     """
   end

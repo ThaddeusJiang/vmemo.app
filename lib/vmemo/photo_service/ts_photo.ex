@@ -10,6 +10,24 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
   @collection_name "photos"
 
+  defstruct [:id, :image, :note, :url, :file_id, :inserted_at, :inserted_by]
+
+  def parse(nil) do
+    nil
+  end
+
+  def parse(photo) do
+    %__MODULE__{
+      id: photo["id"],
+      image: photo["image"],
+      note: photo["note"],
+      url: photo["url"],
+      file_id: photo["file_id"],
+      inserted_at: photo["inserted_at"],
+      inserted_by: photo["inserted_by"]
+    }
+  end
+
   def create_photo(photo) do
     Typesense.create_document(@collection_name, photo)
   end
@@ -53,6 +71,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
   def hybird_search_photos(q, opts \\ []) do
     user_id = Keyword.get(opts, :user_id, "")
+    page = Keyword.get(opts, :page, 1)
     req = Typesense.build_request("/multi_search")
 
     res =
@@ -66,8 +85,8 @@ defmodule Vmemo.PhotoService.TsPhoto do
               "prefix" => "false",
               "filter_by" => "inserted_by:#{user_id}",
               "exclude_fields" => "image_embedding",
-              "page" => 1,
-              "per_page" => 100
+              "page" => page,
+              "per_page" => 10
             }
           ]
         }
@@ -75,7 +94,10 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
     {:ok, photos} = Typesense.handle_multi_search_res(res)
 
-    photos
+    case photos do
+      nil -> []
+      _ -> photos
+    end
   end
 
   def list_similar_photos(id, opts \\ []) do

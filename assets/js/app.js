@@ -17,6 +17,7 @@
 
 import Hooks from "./_hooks"
 import { Resize } from "./hooks/resize"
+import { InfiniteScroll } from "./hooks/infinite_scroll"
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
@@ -30,6 +31,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
   hooks: {
     ...Hooks,
     Resize,
+    InfiniteScroll,
   },
   longPollFallbackMs: 2500,
   params: { _csrf_token: csrfToken }

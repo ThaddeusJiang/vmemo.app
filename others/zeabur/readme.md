@@ -1,7 +1,5 @@
 # Zeabur
 
-one-click deploy your project to the cloud
+one-click deploy your vmemo on zeabur.com
 
-```sh
-npx zeabur template update -c H3EL85 -f vmemo.yml
-```
+https://github.com/ThaddeusJiang/zeabur-templates/blob/main/vmemo.yml

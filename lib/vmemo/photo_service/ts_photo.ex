@@ -42,6 +42,10 @@ defmodule Vmemo.PhotoService.TsPhoto do
     Typesense.update_document(@collection_name, photo)
   end
 
+  def delete_photo(id) do
+    Typesense.delete_document(@collection_name, id)
+  end
+
   def update_note(id, note) do
     update_photo(%{
       id: id,

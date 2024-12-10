@@ -76,6 +76,7 @@ defmodule SmallSdk.Typesense do
   def delete_document(collection_name, document_id) do
     req = build_request("/collections/#{collection_name}/documents/#{document_id}")
     res = Req.delete(req)
+
     handle_response(res)
   end
 

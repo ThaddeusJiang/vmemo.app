@@ -5,7 +5,8 @@ on:
     tags:
       - "*"
     branches:
-      - main # tag is latest
+      - dev
+      - main
 
 jobs:
   build:

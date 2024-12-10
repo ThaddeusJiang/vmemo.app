@@ -57,7 +57,8 @@ jobs:
 
       - name: Set up database
         run: |
-          mix ecto.setup
+          mix ecto.create
+          mix ecto.migrate
 
       - name: Wait for Typesense
         run: |

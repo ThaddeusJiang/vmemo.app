@@ -54,7 +54,7 @@ defmodule VmemoWeb.PhotoIdLive do
             </figcaption> --%>
             <img src={@photo.url} alt={@photo.note} class="object-cover rounded shadow" />
             <button
-              class="btn sm:btn-sm btn-ghost text-error btn-circle  absolute top-1 right-1 hidden group-hover:block group-focus:block "
+              class="btn sm:btn-xs btn-error btn-circle absolute top-1 right-1 hidden group-hover:block group-focus:block "
               phx-click="delete_photo"
               phx-value-id={@photo.id}
             >

@@ -109,7 +109,13 @@ defmodule VmemoWeb.HomePageLive do
               navigate={~p"/photos/#{photo.id}"}
               class="link link-hover block"
             >
-              <img src={photo.url} alt={photo.note} class="w-full h-auto object-cover rounded shadow" />
+              <img
+                phx-hook="ImageLoader"
+                id={photo.id}
+                src={photo.url}
+                alt={photo.note}
+                class="w-full h-auto object-cover rounded shadow"
+              />
             </.link>
           </div>
         </div>

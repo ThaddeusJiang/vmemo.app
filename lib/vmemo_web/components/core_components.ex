@@ -17,7 +17,7 @@ defmodule VmemoWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import VmemoWeb.Gettext
+  use Gettext, backend: VmemoWeb.Gettext
 
   @doc """
   Renders a modal.

@@ -33,7 +33,9 @@ defmodule Vmemo.PhotoService.TsPhoto do
   end
 
   def get_photo(id) do
-    Typesense.get_document(@collection_name, id)
+    {:ok, photo} = Typesense.get_document(@collection_name, id)
+
+    photo |> parse()
   end
 
   def update_photo(photo) do
@@ -72,6 +74,8 @@ defmodule Vmemo.PhotoService.TsPhoto do
   def hybird_search_photos(q, opts \\ []) do
     user_id = Keyword.get(opts, :user_id, "")
     page = Keyword.get(opts, :page, 1)
+    per_page = 10
+
     req = Typesense.build_request("/multi_search")
 
     res =
@@ -82,11 +86,11 @@ defmodule Vmemo.PhotoService.TsPhoto do
               "query_by" => "note, image_embedding",
               "q" => q,
               "collection" => "photos",
-              "prefix" => "false",
               "filter_by" => "inserted_by:#{user_id}",
               "exclude_fields" => "image_embedding",
               "page" => page,
-              "per_page" => 10
+              "per_page" => per_page,
+              "sort_by" => "_text_match:desc,_vector_distance:asc,inserted_at:desc"
             }
           ]
         }
@@ -94,10 +98,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
     {:ok, photos} = Typesense.handle_multi_search_res(res)
 
-    case photos do
-      nil -> []
-      _ -> photos
-    end
+    photos |> Enum.map(&parse/1)
   end
 
   def list_similar_photos(id, opts \\ []) do
@@ -121,7 +122,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
     {:ok, photos} = Typesense.handle_multi_search_res(res)
 
-    photos
+    photos |> Enum.map(&parse/1)
   end
 
   def create_collection_photos_20241203() do

@@ -77,56 +77,60 @@ defmodule VmemoWeb.PhotoUploadLive do
         <label for={@uploads.photos.ref} class="relative h-auto">
           <section
             phx-drop-target={@uploads.photos.ref}
-            class=" aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 "
+            class=" aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 hover:bg-gray-100 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 "
           >
-            <div class="grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 ">
-              <%= for {entry, index} <- Enum.with_index(@uploads.photos.entries, 1) do %>
-                <article class="upload-entry relative">
-                  <figure>
-                    <.live_img_preview
-                      entry={entry}
-                      class={"h-auto w-full object-cover rounded"
+            <div class="grow grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 ">
+              <article
+                :for={{entry, index} <- Enum.with_index(@uploads.photos.entries, 1)}
+                class="upload-entry relative"
+              >
+                <figure>
+                  <.live_img_preview
+                    entry={entry}
+                    class={"h-auto w-full object-cover rounded"
                       <> if entry.progress > 0 and entry.progress < 100, do: "opacity-50" , else: ""}
-                    />
-                  </figure>
-                  <%= if entry.progress == 0 do %>
-                    <button
-                      type="button"
-                      phx-click="cancel-upload"
-                      phx-value-ref={entry.ref}
-                      aria-label="cancel"
-                      class="absolute top-2 right-1 text-white bg-blue-500 rounded-full w-6 h-6 flex items-center justify-center"
+                  />
+                </figure>
+                <%= if entry.progress == 0 do %>
+                  <button
+                    type="button"
+                    phx-click="cancel-upload"
+                    phx-value-ref={entry.ref}
+                    aria-label="cancel"
+                    class="absolute top-2 right-1 btn btn-circle btn-xs btn-info"
+                  >
+                    <%= index %>
+                  </button>
+                <% else %>
+                  <div class="absolute inset-0  flex justify-center items-center">
+                    <div
+                      class=" radial-progress text-white dark:text-black"
+                      style={"--value:#{entry.progress}; --size:2rem; --thickness: 4px;"}
+                      role="progressbar"
                     >
-                      <%= index %>
-                    </button>
-                  <% else %>
-                    <div class="absolute inset-0  flex justify-center items-center">
-                      <div
-                        class=" radial-progress text-white dark:text-black"
-                        style={"--value:#{entry.progress}; --size:2rem; --thickness: 2px;"}
-                        role="progressbar"
-                      >
-                        <span class="sr-only">Uploading...</span>
-                      </div>
+                      <span class="sr-only">Uploading...</span>
                     </div>
-                  <% end %>
-                </article>
-              <% end %>
+                  </div>
+                <% end %>
+              </article>
             </div>
 
             <.live_file_input upload={@uploads.photos} class="hidden" />
-            <label class="block py-[2px] rounded-full place-content-center ">
+            <label
+              for={@uploads.photos.ref}
+              class="block flex-none py-[2px] rounded-full place-content-center  hover:cursor-pointer"
+            >
               Drop media to reorder
             </label>
           </section>
         </label>
-        <%!-- Phoenix.Component.upload_errors/1 returns a list of error atoms --%>
-        <%= for err <- upload_errors(@uploads.photos) do %>
-          <p class="alert alert-danger"><%= error_to_string(err) %></p>
-        <% end %>
+
+        <p :for={err <- upload_errors(@uploads.photos)} class="alert alert-danger">
+          <%= error_to_string(err) %>
+        </p>
 
         <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">
-          <.button>Upload</.button>
+          <button class="btn btn-primary">Upload</button>
         </footer>
       </form>
     </div>

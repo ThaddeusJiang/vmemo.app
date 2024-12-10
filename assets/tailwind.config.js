@@ -39,7 +39,7 @@ module.exports = {
           warning: "#d73a49", // 警告色
           error: "#cb2431", // 错误色
           "--rounded-box": "0.75rem", // 圆角盒子
-          "--rounded-btn": "0.75rem", // 按钮圆角
+          "--rounded-btn": "0.25rem", // 按钮圆角
           "--rounded-badge": "0.75rem", // 徽章圆角
           "--tab-radius": "0.5rem", // 选项卡圆角
           "--btn-focus-scale": "0.95", // scale transform of button when you focus on it FIXME: not working, ref: https://daisyui.com/docs/utilities/

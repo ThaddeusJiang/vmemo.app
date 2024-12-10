@@ -80,7 +80,7 @@ defmodule VmemoWeb.HomePageLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="container flex flex-col gap-8">
+    <div class="container flex flex-col gap-4">
       <%!-- search box --%>
       <form action="/home" method="get">
         <input

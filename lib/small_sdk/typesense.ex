@@ -58,7 +58,11 @@ defmodule SmallSdk.Typesense do
     req = build_request("/collections/#{collection_name}/documents/#{document_id}")
     res = Req.get(req)
 
-    handle_response(res)
+    case handle_response(res) do
+      {:ok, data} -> {:ok, data}
+      {:error, "Not Found"} -> {:ok, nil}
+      _ -> {:error, "Request failed"}
+    end
   end
 
   @doc """

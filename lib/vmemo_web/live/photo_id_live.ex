@@ -9,6 +9,7 @@ defmodule VmemoWeb.PhotoIdLive do
   def mount(%{"id" => id}, _session, socket) do
     user_id = socket.assigns.current_user.id
     photo = TsPhoto.get_photo(id)
+    # TODO: handle 404
     photos = TsPhoto.list_similar_photos(photo.id, user_id: user_id)
 
     socket =
@@ -32,6 +33,13 @@ defmodule VmemoWeb.PhotoIdLive do
      socket
      |> put_flash(:info, "Deleted")
      |> push_navigate(to: ~p"/photos")}
+  end
+
+  @impl true
+  def handle_event("update_note", %{"note" => note}, socket) do
+    {:ok, _} = TsPhoto.update_note(socket.assigns.photo.id, note)
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -81,12 +89,5 @@ defmodule VmemoWeb.PhotoIdLive do
       </div>
     </div>
     """
-  end
-
-  @impl true
-  def handle_event("update_note", %{"note" => note}, socket) do
-    {:ok, _} = TsPhoto.update_note(socket.assigns.photo.id, note)
-
-    {:noreply, socket}
   end
 end

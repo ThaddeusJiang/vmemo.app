@@ -35,7 +35,10 @@ defmodule Vmemo.PhotoService.TsPhoto do
   def get_photo(id) do
     {:ok, photo} = Typesense.get_document(@collection_name, id)
 
-    photo |> parse()
+    case photo do
+      nil -> nil
+      _ -> parse(photo)
+    end
   end
 
   def update_photo(photo) do
@@ -80,6 +83,12 @@ defmodule Vmemo.PhotoService.TsPhoto do
     page = Keyword.get(opts, :page, 1)
     per_page = 10
 
+    q =
+      case String.trim(q) do
+        "" -> "*"
+        q -> q
+      end
+
     req = Typesense.build_request("/multi_search")
 
     res =
@@ -94,7 +103,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
               "exclude_fields" => "image_embedding",
               "page" => page,
               "per_page" => per_page,
-              "sort_by" => "_text_match:desc,_vector_distance:asc,inserted_at:desc"
+              "sort_by" => "inserted_at:desc"
             }
           ]
         }

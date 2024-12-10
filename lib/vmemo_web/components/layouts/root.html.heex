@@ -34,9 +34,13 @@
 
         <ul class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
           <%= if @current_user do %>
-            <li class="text-[0.8125rem] leading-6 text-zinc-900">
-              <%= @current_user.display_name || @current_user.email %>
-            </li>
+            <div class="avatar placeholder online">
+              <div class="bg-neutral text-neutral-content w-8 rounded-full">
+                <span>
+                  <%= String.at(@current_user.display_name || @current_user.email, 0) %>
+                </span>
+              </div>
+            </div>
             <li>
               <.link
                 href={~p"/users/settings"}

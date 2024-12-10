@@ -10,7 +10,7 @@ module.exports = {
     "./js/**/*.js",
     "../lib/vmemo_web.ex",
     "../lib/vmemo_web/**/*.*ex",
-    "../lib/vmemo_web/**/*.sface",
+    "../lib/vmemo_web/**/*.{heex,sface}",
     "../priv/catalogue/**/*.{ex,sface}"
   ],
   theme: {

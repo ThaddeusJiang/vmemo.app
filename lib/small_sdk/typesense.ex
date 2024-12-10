@@ -170,10 +170,28 @@ defmodule SmallSdk.Typesense do
   end
 
   def handle_multi_search_res(res) do
-    {:ok, data} = handle_response(res)
-    documents = data["results"] |> hd() |> Map.get("hits") |> Enum.map(&Map.get(&1, "document"))
+    case handle_response(res) do
+      {:ok, data} ->
+        # data= %{
+        #   "results" => [
+        #     %{
+        #       "code" => 404,
+        #       "error" => "Could not find a field named `default_sorting_field` in the schema for sorting."
+        #     }
+        #   ]
+        # }
 
-    {:ok, documents}
+        documents =
+          data["results"] |> hd() |> Map.get("hits") |> Enum.map(&Map.get(&1, "document"))
+
+        {:ok, documents}
+
+      {:error, "Not Found"} ->
+        {:ok, %{"results" => []}}
+
+      _ ->
+        {:error, "Request failed"}
+    end
   end
 
   def build_request(path) do

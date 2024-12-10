@@ -96,14 +96,15 @@ defmodule Vmemo.PhotoService.TsPhoto do
         json: %{
           "searches" => [
             %{
-              "query_by" => "note, image_embedding",
+              "query_by" => "note,image_embedding",
               "q" => q,
               "collection" => "photos",
               "filter_by" => "inserted_by:#{user_id}",
+              "vector_query" => "image_embedding:([], k: 200, distance_threshold: 0.79)",
               "exclude_fields" => "image_embedding",
-              "page" => page,
+              "sort_by" => "_text_match:desc,inserted_at:desc",
               "per_page" => per_page,
-              "sort_by" => "inserted_at:desc"
+              "page" => page
             }
           ]
         }

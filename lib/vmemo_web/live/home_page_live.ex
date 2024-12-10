@@ -93,8 +93,11 @@ defmodule VmemoWeb.HomePageLive do
         <%!-- search when typing --%>
       </form>
 
-      <div id="photos" phx-hook="Resize">
-        <div class={
+      <%= if Enum.empty?(@photos) do %>
+        <div class="text-center text-zinc-500">No photos found</div>
+      <% else %>
+        <div id="photos" phx-hook="WindowResizer">
+          <div class={
           "grid gap-2"
           <> case @col do
             2 -> " grid-cols-2"
@@ -103,23 +106,24 @@ defmodule VmemoWeb.HomePageLive do
             _ -> " hidden"
           end
         }>
-          <div :for={photos <- @photos |> split_list(@col)} class="space-y-2">
-            <.link
-              :for={photo <- photos}
-              navigate={~p"/photos/#{photo.id}"}
-              class="link link-hover block"
-            >
-              <img
-                phx-hook="ImageLoader"
-                id={photo.id}
-                src={photo.url}
-                alt={photo.note}
-                class="w-full h-auto object-cover rounded shadow"
-              />
-            </.link>
+            <div :for={photos <- @photos |> split_list(@col)} class="space-y-2">
+              <.link
+                :for={photo <- photos}
+                navigate={~p"/photos/#{photo.id}"}
+                class="link link-hover block"
+              >
+                <img
+                  phx-hook="ImageLoader"
+                  id={photo.id}
+                  src={photo.url}
+                  alt={photo.note}
+                  class="w-full h-auto object-cover rounded shadow"
+                />
+              </.link>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
 
       <div phx-hook="InfiniteScroll" id="infinite-scroll"></div>
     </div>

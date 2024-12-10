@@ -1,4 +1,4 @@
-export const Resize = {
+export const WindowResizer = {
     mounted() {
         const sendElWidth = () => {
             this.pushEvent("window_resize", {

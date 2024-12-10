@@ -10,16 +10,43 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
   @collection_name "photos"
 
+  defstruct [:id, :image, :note, :url, :file_id, :inserted_at, :inserted_by]
+
+  def parse(nil) do
+    nil
+  end
+
+  def parse(photo) do
+    %__MODULE__{
+      id: photo["id"],
+      image: photo["image"],
+      note: photo["note"],
+      url: photo["url"],
+      file_id: photo["file_id"],
+      inserted_at: photo["inserted_at"],
+      inserted_by: photo["inserted_by"]
+    }
+  end
+
   def create_photo(photo) do
     Typesense.create_document(@collection_name, photo)
   end
 
   def get_photo(id) do
-    Typesense.get_document(@collection_name, id)
+    {:ok, photo} = Typesense.get_document(@collection_name, id)
+
+    case photo do
+      nil -> nil
+      _ -> parse(photo)
+    end
   end
 
   def update_photo(photo) do
     Typesense.update_document(@collection_name, photo)
+  end
+
+  def delete_photo(id) do
+    Typesense.delete_document(@collection_name, id)
   end
 
   def update_note(id, note) do
@@ -53,6 +80,15 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
   def hybird_search_photos(q, opts \\ []) do
     user_id = Keyword.get(opts, :user_id, "")
+    page = Keyword.get(opts, :page, 1)
+    per_page = 10
+
+    q =
+      case String.trim(q) do
+        "" -> "*"
+        q -> q
+      end
+
     req = Typesense.build_request("/multi_search")
 
     res =
@@ -60,14 +96,15 @@ defmodule Vmemo.PhotoService.TsPhoto do
         json: %{
           "searches" => [
             %{
-              "query_by" => "note, image_embedding",
+              "query_by" => "note,image_embedding",
               "q" => q,
               "collection" => "photos",
-              "prefix" => "false",
               "filter_by" => "inserted_by:#{user_id}",
+              "vector_query" => "image_embedding:([], k: 200, distance_threshold: 0.79)",
               "exclude_fields" => "image_embedding",
-              "page" => 1,
-              "per_page" => 100
+              "sort_by" => "_text_match:desc,inserted_at:desc",
+              "per_page" => per_page,
+              "page" => page
             }
           ]
         }
@@ -75,7 +112,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
     {:ok, photos} = Typesense.handle_multi_search_res(res)
 
-    photos
+    photos |> Enum.map(&parse/1)
   end
 
   def list_similar_photos(id, opts \\ []) do
@@ -99,7 +136,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
     {:ok, photos} = Typesense.handle_multi_search_res(res)
 
-    photos
+    photos |> Enum.map(&parse/1)
   end
 
   def create_collection_photos_20241203() do

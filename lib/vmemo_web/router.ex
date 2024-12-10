@@ -21,8 +21,6 @@ defmodule VmemoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :landing
-
-    live "/hello", HelloLive
   end
 
   # Other scopes may use custom stacks.
@@ -42,6 +40,7 @@ defmodule VmemoWeb.Router do
     scope "/dev" do
       pipe_through :browser
 
+      live "/surface", VmemoWeb.SurfacePlayLive
       live_dashboard "/dashboard", metrics: VmemoWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end

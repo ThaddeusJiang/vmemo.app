@@ -1,7 +1,8 @@
-defmodule VmemoWeb.HelloLive do
-  use Surface.LiveView
+defmodule VmemoWeb.SurfacePlayLive do
+  use VmemoWeb, :surface_live_view
 
   alias VmemoWeb.Ui.Box
+  alias VmemoWeb.Ui.Button
   alias VmemoWeb.HelloComponent
 
   def render(assigns) do
@@ -16,6 +17,10 @@ defmodule VmemoWeb.HelloLive do
       <Box>
         hello, box
       </Box>
+
+      <Button type="submit">
+        Click me
+      </Button>
     </div>
     """
   end

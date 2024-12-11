@@ -45,7 +45,7 @@ defmodule VmemoWeb.PhotoIdLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="container flex flex-col space-y-10">
+    <div class=" flex flex-col space-y-10">
       <div class=" gap-4 space-y-4 sm:grid sm:grid-cols-2 sm:space-y-0 max-h-[60%] ">
         <div class="space-y-4 flex justify-center relative">
           <figure class="w-auto h-auto max-h-[60%] group">
@@ -75,7 +75,7 @@ defmodule VmemoWeb.PhotoIdLive do
         </.form>
       </div>
 
-      <div class="container">
+      <div class="">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
           Similar photos
         </h2>

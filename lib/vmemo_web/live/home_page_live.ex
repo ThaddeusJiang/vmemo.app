@@ -39,6 +39,7 @@ defmodule VmemoWeb.HomePageLive do
   def handle_event("window_resize", %{"width" => width}, socket) do
     col =
       cond do
+        width >= 1024 -> 5
         width >= 768 -> 4
         width >= 640 -> 3
         true -> 2
@@ -80,7 +81,7 @@ defmodule VmemoWeb.HomePageLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="container flex flex-col gap-4">
+    <div class="flex flex-col gap-4 w-full max-w-screen-lg mx-auto">
       <%!-- search box --%>
       <form action="/home" method="get">
         <input
@@ -100,9 +101,10 @@ defmodule VmemoWeb.HomePageLive do
           <div class={
           "grid gap-2"
           <> case @col do
-            2 -> " grid-cols-2"
-            3 -> " grid-cols-3"
+            5 -> " grid-cols-5"
             4 -> " grid-cols-4"
+            3 -> " grid-cols-3"
+            2 -> " grid-cols-2"
             _ -> " hidden"
           end
         }>

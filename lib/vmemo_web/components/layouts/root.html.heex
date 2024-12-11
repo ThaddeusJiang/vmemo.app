@@ -11,77 +11,7 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class=" min-h-screen flex flex-col ">
-    <header class="px-4 sm:px-6 lg:px-8 flex-none">
-      <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
-        <div class="flex items-center gap-4">
-          <%= if @current_user do %>
-            <.link href="/home" class="flex gap-2 items-center font-bold">
-              <img src={~p"/images/logo.png"} width="36" /> Vmemo
-            </.link>
-            <.link
-              href="/upload"
-              class="text-zinc-900 font-semibold hover:text-zinc-700 hover:underline"
-            >
-              /Upload
-            </.link>
-          <% else %>
-            <a href="/" class="flex gap-2 items-center font-bold">
-              <img src={~p"/images/logo.png"} width="36" /> Vmemo
-            </a>
-          <% end %>
-        </div>
-
-        <ul class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-          <%= if @current_user do %>
-            <div class="avatar placeholder online">
-              <div class="bg-neutral text-neutral-content w-8 rounded-full">
-                <span>
-                  <%= String.at(@current_user.display_name || @current_user.email, 0) %>
-                </span>
-              </div>
-            </div>
-            <li>
-              <.link
-                href={~p"/users/settings"}
-                class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-              >
-                Settings
-              </.link>
-            </li>
-            <li>
-              <.link
-                href={~p"/users/log_out"}
-                method="delete"
-                class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-              >
-                Log out
-              </.link>
-            </li>
-          <% else %>
-            <li>
-              <.link
-                href={~p"/users/register"}
-                class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-              >
-                Register
-              </.link>
-            </li>
-            <li>
-              <.link
-                href={~p"/users/log_in"}
-                class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-              >
-                Log in
-              </.link>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    </header>
-
-    <div class=" grow flex flex-col">
-      <%= @inner_content %>
-    </div>
+  <body class="min-h-screen">
+    <%= @inner_content %>
   </body>
 </html>

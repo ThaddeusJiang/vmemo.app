@@ -76,6 +76,7 @@ defmodule VmemoWeb.PhotoUploadLive do
       phx-submit="save"
       phx-change="validate"
       class="h-81 mx-auto w-full sm:max-w-screen-sm"
+      phx-hook="ClipboardMediaFetcher"
     >
       <%!-- use phx-drop-target with the upload ref to enable file drag and drop --%>
       <label for={@uploads.photos.ref} class="relative h-auto">

@@ -19,6 +19,7 @@ import Hooks from "./_hooks"
 import { WindowResizer } from "./hooks/window_resizer"
 import { InfiniteScroll } from "./hooks/infinite_scroll"
 import { ImageLoader } from "./hooks/image_loader"
+import { ClipboardMediaFetcher } from "./hooks/clipboard_media_fetcher"
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
@@ -34,6 +35,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
     WindowResizer,
     InfiniteScroll,
     ImageLoader,
+    ClipboardMediaFetcher,
   },
   longPollFallbackMs: 2500,
   params: { _csrf_token: csrfToken }

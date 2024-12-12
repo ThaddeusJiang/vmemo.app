@@ -11,17 +11,24 @@ export const ClipboardMediaFetcher = {
             const clipboardItems = await navigator.clipboard.read();
             const files = []
 
-            clipboardItems.forEach((item, index) => {
+            clipboardItems.forEach((item) => {
 
-                item.types.forEach((type) => {
+                item.types.forEach(async (type) => {
 
-                    if (type.startsWith('image')) {
-                        console.debug("Clipboard item type: ", type);
-                        item.getType(type).then((blob) => {
-                            const file = new File([blob], 'anyway.png', { type });
-                            files.push(file);
-                        });
-                    }
+                    console.debug("Clipboard item type: ", type);
+                    const blob = await item.getType(type);
+
+                    console.debug("Blob: ", blob);
+                    const text = await blob.text();
+                    console.debug("Text: ", text);
+
+                    // const url = URL.createObjectURL(blob);
+                    // console.debug("Blob URL: ", url);
+                    // if (type.startsWith('image')) {
+                    //     const blob = await item.getType(type)
+                    //     const file = new File([blob], 'anyway.png', { type });
+                    //     files.push(file);
+                    // }
                 });
             });
 
@@ -48,10 +55,32 @@ export const ClipboardMediaFetcher = {
     mounted() {
 
         window.addEventListener('paste', async (event) => {
-            const files = await this.fetchClipboardContent();
 
-            const fileEl = this.el.querySelector('input[type="file"]');
-            this.updateInputFiles(fileEl, files);
+
+            const fileInput = this.el.querySelector('input[type="file"]');
+            const dataTransfer = new DataTransfer();
+
+            Array.from(fileInput.files).forEach(file => {
+                dataTransfer.items.add(file);
+            });
+
+            const items = event.clipboardData.items;
+            if (items) {
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+
+                    if (item.kind === 'file') {
+                        const file = item.getAsFile();
+                        dataTransfer.items.add(file);
+                    }
+                }
+            }
+
+            fileInput.files = dataTransfer.files;
+            console.debug("File input: ", fileInput.files);
+            fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+            // this.updateInputFiles(fileEl, files);
         });
     }
 }

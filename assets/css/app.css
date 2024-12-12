@@ -6,3 +6,30 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+@layer base {
+    textarea {
+        field-sizing: content;
+        min-height: 3lh;
+
+        width: 100%;
+    }
+}
+
+@layer components {
+    .btn {
+        @apply btn-sm;
+    }
+
+    .btn-accent:hover {
+        @apply bg-opacity-80;
+    }
+
+    .btn-outline {
+        @apply border-base-300 shadow-sm;
+    }
+
+    .btn-outline:hover {
+        @apply bg-base-200 border-base-300 text-base-content;
+    }
+}

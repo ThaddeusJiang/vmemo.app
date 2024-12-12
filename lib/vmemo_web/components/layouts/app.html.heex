@@ -1,5 +1,69 @@
-<main class="px-4 py-4 sm:py-8 sm:px-6 lg:px-8">
-  <div class="mx-auto max-w-2xl">
+<main class="flex flex-col ">
+  <header class="px-4 sm:px-6 lg:px-8 flex-none">
+    <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+      <div class="flex items-center gap-4">
+        <%= if @current_user do %>
+          <.link href="/home" class="flex gap-4 items-center font-bold">
+            <img src={~p"/images/logo.svg"} class="h-9" /> Vmemo
+          </.link>
+
+          <.link href="/upload" class="btn btn-accent btn-square">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </.link>
+        <% else %>
+          <a href="/" class="flex gap-4 items-center font-bold">
+            <img src={~p"/images/logo.svg"} class="h-9" /> Vmemo
+          </a>
+        <% end %>
+      </div>
+
+      <ul class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+        <%= if @current_user do %>
+          <div class="avatar placeholder online">
+            <div class="bg-neutral text-neutral-content w-8 rounded-full">
+              <span>
+                <%= String.at(@current_user.display_name || @current_user.email, 0) %>
+              </span>
+            </div>
+          </div>
+          <li>
+            <.link
+              href={~p"/users/settings"}
+              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            >
+              Settings
+            </.link>
+          </li>
+          <li>
+            <.link
+              href={~p"/users/log_out"}
+              method="delete"
+              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            >
+              Log out
+            </.link>
+          </li>
+        <% else %>
+          <li>
+            <a class="btn btn-accent rounded-full" data-headlessui-state="" href="/users/log_in">
+              Get started
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </header>
+
+  <div class=" grow flex flex-col p-4 sm:py-8 -mt-1 ">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
   </div>

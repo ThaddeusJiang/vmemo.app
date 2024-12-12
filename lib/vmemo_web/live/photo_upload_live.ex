@@ -71,69 +71,83 @@ defmodule VmemoWeb.PhotoUploadLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="w-full h-full flex justify-center items-center">
-      <form id="upload-form" phx-submit="save" phx-change="validate" class="container h-auto min-h-80">
-        <%!-- use phx-drop-target with the upload ref to enable file drag and drop --%>
-        <label for={@uploads.photos.ref} class="relative h-auto">
-          <section
-            phx-drop-target={@uploads.photos.ref}
-            class=" aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 hover:bg-gray-100 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 "
+    <form
+      id="upload-form"
+      phx-submit="save"
+      phx-change="validate"
+      class="h-81 mx-auto w-full sm:max-w-screen-sm"
+    >
+      <%!-- use phx-drop-target with the upload ref to enable file drag and drop --%>
+      <label for={@uploads.photos.ref} class="relative h-auto">
+        <section
+          phx-drop-target={@uploads.photos.ref}
+          class=" aspect-auto sm:aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 hover:bg-gray-100 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 "
+        >
+          <div
+            :if={@uploads.photos.entries != []}
+            class="grow grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 "
           >
-            <div class="grow grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 ">
-              <article
-                :for={{entry, index} <- Enum.with_index(@uploads.photos.entries, 1)}
-                class="upload-entry relative"
-              >
-                <figure>
-                  <.live_img_preview
-                    entry={entry}
-                    class={"h-auto w-full object-cover rounded"
+            <article
+              :for={{entry, index} <- Enum.with_index(@uploads.photos.entries, 1)}
+              class="upload-entry relative"
+            >
+              <figure>
+                <.live_img_preview
+                  entry={entry}
+                  class={"h-auto w-full object-cover rounded"
                       <> if entry.progress > 0 and entry.progress < 100, do: "opacity-50" , else: ""}
-                  />
-                </figure>
-                <%= if entry.progress == 0 do %>
-                  <button
-                    type="button"
-                    phx-click="cancel-upload"
-                    phx-value-ref={entry.ref}
-                    aria-label="cancel"
-                    class="absolute top-2 right-1 btn btn-circle btn-xs btn-info"
+                />
+              </figure>
+              <%= if entry.progress == 0 do %>
+                <button
+                  type="button"
+                  phx-click="cancel-upload"
+                  phx-value-ref={entry.ref}
+                  aria-label="cancel"
+                  class="absolute top-2 right-1 btn btn-xs btn-circle btn-info"
+                >
+                  <%= index %>
+                </button>
+              <% else %>
+                <div class="absolute inset-0  flex justify-center items-center">
+                  <div
+                    class=" radial-progress text-white dark:text-black"
+                    style={"--value:#{entry.progress}; --size:2rem; --thickness: 4px;"}
+                    role="progressbar"
                   >
-                    <%= index %>
-                  </button>
-                <% else %>
-                  <div class="absolute inset-0  flex justify-center items-center">
-                    <div
-                      class=" radial-progress text-white dark:text-black"
-                      style={"--value:#{entry.progress}; --size:2rem; --thickness: 4px;"}
-                      role="progressbar"
-                    >
-                      <span class="sr-only">Uploading...</span>
-                    </div>
+                    <span class="sr-only">Uploading...</span>
                   </div>
-                <% end %>
-              </article>
-            </div>
+                </div>
+              <% end %>
+            </article>
+          </div>
 
-            <.live_file_input upload={@uploads.photos} class="hidden" />
+          <.live_file_input upload={@uploads.photos} class="hidden" />
+          <div
+            :if={@uploads.photos.entries == []}
+            class=" justify-self-center grow flex flex-col justify-center"
+          >
+            <img src={~p"/images/upload-cloud-line.svg"} alt="upload" class="w-12 h-12 mx-auto" />
             <label
               for={@uploads.photos.ref}
               class="block flex-none py-[2px] rounded-full place-content-center  hover:cursor-pointer"
             >
-              Drop media to reorder
+              <span class="text-xs text-gray-500">
+                Drag and drop images here or click to upload
+              </span>
             </label>
-          </section>
-        </label>
+          </div>
+        </section>
+      </label>
 
-        <p :for={err <- upload_errors(@uploads.photos)} class="alert alert-danger">
-          <%= error_to_string(err) %>
-        </p>
+      <p :for={err <- upload_errors(@uploads.photos)} class="alert alert-danger">
+        <%= error_to_string(err) %>
+      </p>
 
-        <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">
-          <button class="btn btn-primary">Upload</button>
-        </footer>
-      </form>
-    </div>
+      <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">
+        <.button>Upload</.button>
+      </footer>
+    </form>
     """
   end
 

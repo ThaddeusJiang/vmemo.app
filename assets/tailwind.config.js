@@ -25,19 +25,24 @@ module.exports = {
       {
         base: {
           "color-scheme": "light",
-          primary: "#0f172a", // 主色
-          "primary-content": "#ffffff", // 主色文本
-          secondary: "#24292e", // GitHub 灰黑
-          accent: "#6f42c1", // 紫色
+
+          // TODO: 需要吗？不需要可以删掉。
           neutral: "#586069", // 中性色
-          "base-100": "#ffffff", // 背景色
-          "base-200": "#f6f8fa", // 辅助背景色
-          "base-300": "#e1e4e8", // 边框色
-          "base-content": "#24292e", // 文字颜色
+
+          "base-100": "rgb(245 245 245)", // 背景色
+          "base-200": "rgb(229 229 229)", // 辅助背景色
+          "base-300": "rgb(212 212 212)", // 边框色
+          "base-content": "#24292e", // body 文本色
+
+          accent: "#18181b", // 主要使用，但是不是 brand color, 例如提交按钮
+          "accent-content": "#fafafa",
+
           info: "#0366d6", // 信息色（GitHub蓝）
           success: "#28a745", // 成功色
           warning: "#d73a49", // 警告色
           error: "#cb2431", // 错误色
+          "error-content": "#ffffff", // 错误色文本
+
           "--rounded-box": "0.75rem", // 圆角盒子
           "--rounded-btn": "0.25rem", // 按钮圆角
           "--rounded-badge": "0.75rem", // 徽章圆角

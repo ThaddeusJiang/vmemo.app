@@ -1,5 +1,89 @@
-<.flash_group flash={@flash} />
+<main class="flex flex-col min-h-screen">
+  <header class="px-4 sm:px-6 lg:px-8 flex-none">
+    <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+      <div class="flex items-center gap-4">
+        <%= if @current_user do %>
+          <.link href="/home" class="flex gap-4 items-center font-bold">
+            <img src={~p"/images/logo.svg"} class="h-9" /> Vmemo
+          </.link>
+          <.link
+            href="/upload"
+            class="text-zinc-900 font-semibold hover:text-zinc-700 hover:underline"
+          >
+            /Upload
+          </.link>
+        <% else %>
+          <a href="/" class="flex gap-4 items-center font-bold">
+            <img src={~p"/images/logo.svg"} class="h-9" /> Vmemo
+          </a>
+        <% end %>
+      </div>
 
-<div class="grow flex items-center justify-center">
-  Vmemo.app
-</div>
+      <ul class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+        <%= if @current_user do %>
+          <div class="avatar placeholder online">
+            <div class="bg-neutral text-neutral-content w-8 rounded-full">
+              <span>
+                <%= String.at(@current_user.display_name || @current_user.email, 0) %>
+              </span>
+            </div>
+          </div>
+          <li>
+            <.link
+              href={~p"/users/settings"}
+              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            >
+              Settings
+            </.link>
+          </li>
+          <li>
+            <.link
+              href={~p"/users/log_out"}
+              method="delete"
+              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            >
+              Log out
+            </.link>
+          </li>
+        <% else %>
+          <li>
+            <a class="btn btn-accent rounded-full" data-headlessui-state="" href="/users/log_in">
+              Get started
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </header>
+
+  <div class=" grow flex flex-col">
+    <.flash_group flash={@flash} />
+
+    <div class="relative">
+      <div class="relative px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl lg:max-w-7xl">
+          <div class="pb-24 pt-16 sm:pb-32 sm:pt-24 md:pb-48 md:pt-32">
+            <h1 class="font-display text-balance text-3xl/[0.9] font-medium tracking-tight text-gray-950 sm:text-4xl/[0.8] md:text-5xl/[0.8]">
+              See, Capture, Remember
+            </h1>
+            <p class="mt-8 text-xl/7 font-medium text-gray-950/75 sm:text-2xl/8">
+              Our brain love visual content, capture the moment and remember it.
+            </p>
+            <div class="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
+              <a
+                class="btn btn-accent rounded-full"
+                data-headlessui-state=""
+                href="/users/register"
+              >
+                Get started
+              </a>
+              <%!-- <a class="btn btn-outline rounded-full" data-headlessui-state="" href="#">
+                Open source
+              </a> --%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

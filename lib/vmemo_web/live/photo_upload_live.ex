@@ -71,7 +71,12 @@ defmodule VmemoWeb.PhotoUploadLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <form id="upload-form" phx-submit="save" phx-change="validate" class="h-80 mx-auto max-w-sm">
+    <form
+      id="upload-form"
+      phx-submit="save"
+      phx-change="validate"
+      class="h-81 mx-auto w-full sm:max-w-screen-sm"
+    >
       <%!-- use phx-drop-target with the upload ref to enable file drag and drop --%>
       <label for={@uploads.photos.ref} class="relative h-auto">
         <section

@@ -45,7 +45,7 @@ defmodule VmemoWeb.PhotoIdLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class=" flex flex-col space-y-10">
+    <div class=" flex flex-col space-y-10 mx-auto sm:max-w-screen-md">
       <div class=" gap-4 space-y-4 sm:grid sm:grid-cols-2 sm:space-y-0 max-h-[60%] ">
         <div class="space-y-4 flex justify-center relative">
           <figure class="w-auto h-auto max-h-[60%] group">
@@ -67,7 +67,7 @@ defmodule VmemoWeb.PhotoIdLive do
           <textarea
             id={@note_form[:note].id}
             name={@note_form[:note].name}
-            class="w-full h-24 p-2 text-lg border border-gray-300 rounded shadow"
+            class="p-2 text-lg border border-gray-300 rounded shadow"
           ><%= Phoenix.HTML.Form.normalize_value("textarea", @note_form[:note].value) %></textarea>
           <button type="submit" class="btn btn-accent w-full" phx-disable-with="Updating">
             Update

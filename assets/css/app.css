@@ -7,6 +7,15 @@
 
 /* This file is for your main application CSS */
 
+@layer base {
+    textarea {
+        field-sizing: content;
+        min-height: 3lh;
+
+        width: 100%;
+    }
+}
+
 @layer components {
     .btn {
         @apply btn-sm;

@@ -217,22 +217,29 @@ defmodule VmemoWeb.CoreComponents do
 
   ## Examples
 
-      <.button>Send!</.button>
-      <.button phx-click="go" class="ml-2">Send!</.button>
-  """
-  attr :type, :string, default: nil
-  attr :class, :string, default: nil
-  attr :rest, :global, include: ~w(disabled form name value)
+      <.button Save</.button>
+      <.button variant="ghost">Cancel</.button>
+      <.button variant="danger">Delete</.button>
 
+      <.button variant="outline">Star</.button>
+      <.button phx-click="go" class="ml-2">Send!</.button>
+
+  """
+  attr :variant, :string, default: "submit", values: ~w(submit ghost danger outline)
+  attr :class, :string, default: nil
+  attr :rest, :global, include: ~w(disabled form name value type)
   slot :inner_block, required: true
 
   def button(assigns) do
     ~H"""
     <button
-      type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75 ",
+        "btn",
+        @variant == "submit" && "btn-accent",
+        @variant == "ghost" && "btn-ghost",
+        @variant == "danger" && "btn-error",
+        @variant == "outline" && "btn-outline",
         @class
       ]}
       {@rest}

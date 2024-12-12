@@ -76,7 +76,7 @@ defmodule VmemoWeb.PhotoUploadLive do
       <label for={@uploads.photos.ref} class="relative h-auto">
         <section
           phx-drop-target={@uploads.photos.ref}
-          class=" aspect-auto sm:aspect-video relative flex flex-col w-full h-60 rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 hover:bg-gray-100 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 "
+          class=" aspect-auto sm:aspect-video relative flex flex-col w-full rounded-lg border bg-base-200 border-gray-300 p-4 text-center hover:border-gray-400 hover:bg-gray-100 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 "
         >
           <div
             :if={@uploads.photos.entries != []}
@@ -99,7 +99,7 @@ defmodule VmemoWeb.PhotoUploadLive do
                   phx-click="cancel-upload"
                   phx-value-ref={entry.ref}
                   aria-label="cancel"
-                  class="absolute top-2 right-1 btn btn-circle btn-xs btn-info"
+                  class="absolute top-2 right-1 btn btn-xs btn-circle btn-info"
                 >
                   <%= index %>
                 </button>
@@ -118,7 +118,10 @@ defmodule VmemoWeb.PhotoUploadLive do
           </div>
 
           <.live_file_input upload={@uploads.photos} class="hidden" />
-          <div class=" justify-self-center grow flex flex-col justify-center">
+          <div
+            :if={@uploads.photos.entries == []}
+            class=" justify-self-center grow flex flex-col justify-center"
+          >
             <img src={~p"/images/upload-cloud-line.svg"} alt="upload" class="w-12 h-12 mx-auto" />
             <label
               for={@uploads.photos.ref}
@@ -137,7 +140,7 @@ defmodule VmemoWeb.PhotoUploadLive do
       </p>
 
       <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">
-        <button class="btn btn-primary">Upload</button>
+        <.button>Upload</.button>
       </footer>
     </form>
     """

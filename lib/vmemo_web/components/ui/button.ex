@@ -13,7 +13,7 @@ defmodule VmemoWeb.Ui.Button do
       class={"btn " <>
         case @variant do
           "outline" -> "btn-outline"
-          "primary" -> "btn-primary"
+          "primary" -> "btn-accent"
           "danger" -> "btn-error"
           _ -> ""
         end}

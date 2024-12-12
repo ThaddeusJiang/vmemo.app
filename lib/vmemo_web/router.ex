@@ -40,7 +40,6 @@ defmodule VmemoWeb.Router do
     scope "/dev" do
       pipe_through :browser
 
-      live "/surface", VmemoWeb.SurfacePlayLive
       live_dashboard "/dashboard", metrics: VmemoWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
@@ -76,6 +75,8 @@ defmodule VmemoWeb.Router do
 
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      live "/ui", SurfacePlayLive
     end
   end
 

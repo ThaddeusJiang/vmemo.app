@@ -99,7 +99,7 @@ defmodule VmemoWeb.HomePageLive do
       <% else %>
         <div id="photos" phx-hook="WindowResizer">
           <div class={
-          "grid gap-2"
+          "grid gap-3"
           <> case @col do
             5 -> " grid-cols-5"
             4 -> " grid-cols-4"
@@ -108,19 +108,13 @@ defmodule VmemoWeb.HomePageLive do
             _ -> " hidden"
           end
         }>
-            <div :for={photos <- @photos |> split_list(@col)} class="space-y-2">
+            <div :for={photos <- @photos |> split_list(@col)} class="space-y-3">
               <.link
                 :for={photo <- photos}
                 navigate={~p"/photos/#{photo.id}"}
                 class="link link-hover block"
               >
-                <img
-                  phx-hook="ImageLoader"
-                  id={photo.id}
-                  src={photo.url}
-                  alt={photo.note}
-                  class="w-full h-auto object-cover rounded shadow"
-                />
+                <.img src={photo.url} alt={photo.note} />
               </.link>
             </div>
           </div>

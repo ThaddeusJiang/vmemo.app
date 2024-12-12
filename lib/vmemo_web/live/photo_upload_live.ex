@@ -95,8 +95,14 @@ defmodule VmemoWeb.PhotoUploadLive do
               <figure>
                 <.live_img_preview
                   entry={entry}
-                  class={"h-auto w-full object-cover rounded"
-                      <> if entry.progress > 0 and entry.progress < 100, do: "opacity-50" , else: ""}
+                  class={[
+                    "h-auto w-full object-cover rounded-lg",
+                    case entry.progress do
+                      0 -> "opacity-100"
+                      100 -> "opacity-0"
+                      _ -> "opacity-50"
+                    end
+                  ]}
                 />
               </figure>
               <%= if entry.progress == 0 do %>
@@ -113,7 +119,7 @@ defmodule VmemoWeb.PhotoUploadLive do
                 <div class="absolute inset-0  flex justify-center items-center">
                   <div
                     class=" radial-progress text-white dark:text-black"
-                    style={"--value:#{entry.progress}; --size:2rem; --thickness: 4px;"}
+                    style={"--value:#{entry.progress}; --size:3rem; --thickness: 4px;"}
                     role="progressbar"
                   >
                     <span class="sr-only">Uploading...</span>

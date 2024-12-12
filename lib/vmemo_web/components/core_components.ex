@@ -661,4 +661,31 @@ defmodule VmemoWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  attr :src, :string, required: true
+  attr :alt, :string, required: true
+  attr :class, :string, default: nil
+  # arbitrary HTML attributes
+  attr :rest, :global
+
+  @doc """
+  Renders an image tag.
+
+  ## Examples
+
+      <.img src="/images/photo.jpg" alt="A photo of a mountain" />
+  """
+  def img(assigns) do
+    ~H"""
+    <img
+      src={@src}
+      alt={@alt}
+      class={[
+        "w-full h-auto object-cover rounded-lg shadow hover:shadow-lg hover:scale-105 hover: transition-transform",
+        @class
+      ]}
+      {@rest}
+    />
+    """
+  end
 end

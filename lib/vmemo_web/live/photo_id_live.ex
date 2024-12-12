@@ -52,7 +52,8 @@ defmodule VmemoWeb.PhotoIdLive do
             <%!-- <figcaption class="text-lg font-semibold text-gray-900 dark:text-gray-50">
               <%= @photo.note %>
             </figcaption> --%>
-            <img src={@photo.url} alt={@photo.note} class="object-cover rounded shadow" />
+
+            <.img src={@photo.url} alt={@photo.note} />
             <button
               class="btn sm:btn-xs btn-error btn-circle absolute top-1 right-1 hidden group-hover:block group-focus:block "
               phx-click="delete_photo"
@@ -75,14 +76,14 @@ defmodule VmemoWeb.PhotoIdLive do
         </.form>
       </div>
 
-      <div class="">
+      <div class=" space-y-2">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
           Similar photos
         </h2>
         <div class="grid grid-cols-3 gap-4">
           <div :for={photo <- @photos} class="space-y-4">
             <.link navigate={~p"/photos/#{photo.id}"}>
-              <img src={photo.url} alt={photo.note} class="w-full h-auto object-cover rounded shadow" />
+              <.img src={photo.url} alt={photo.note} />
             </.link>
           </div>
         </div>

@@ -58,12 +58,12 @@ config :vmemo, VmemoWeb.Endpoint,
 
 # Watch static and templates for browser reloading.
 config :vmemo, VmemoWeb.Endpoint,
-  reloadable_compilers: [:gettext, :elixir, :app, :surface],
+  reloadable_compilers: [:gettext, :elixir, :app],
   live_reload: [
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/vmemo_web/(controllers|live|components)/.*(ex|heex|sface|js)$"
+      ~r"lib/vmemo_web/(controllers|live|components)/.*(ex|heex|js)$"
     ]
   ]
 

@@ -2,8 +2,20 @@
 
 - 设计参考 shadcn/ui 并进行风格微调
 - library 使用 daisyUI
-- 尝试使用 surface-ui
 
+## Component
+
+- core_component for stateless component, Phoenix.Component
+- live/components for stateful component, Phoenix.LiveComponent
+
+## Don't use SurfaceUI
+
+Why?
+
+- config is too complex
+  - setup mistake is easy, have to upgrade after liveview upgrade
+  - build effect, config, Dockerfile and Docker image size.
+- liveview is good enough, surface-ui is cost
 
 ## Button
 

@@ -10,7 +10,7 @@ defmodule Vmemo.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      compilers: Mix.compilers() ++ [:surface]
+      compilers: Mix.compilers() ++ []
     ]
   end
 
@@ -61,7 +61,6 @@ defmodule Vmemo.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:surface, "~> 0.12.0"},
       {:resend, "~> 0.4.0"},
       {:req, "~> 0.5.0"},
       {:mime, "~> 2.0"}

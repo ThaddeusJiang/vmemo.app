@@ -1,7 +1,7 @@
 [
-  import_deps: [:ecto, :ecto_sql, :phoenix, :surface],
+  import_deps: [:ecto, :ecto_sql, :phoenix],
   subdirectories: ["priv/*/migrations"],
-  plugins: [Phoenix.LiveView.HTMLFormatter, Surface.Formatter.Plugin],
+  plugins: [Phoenix.LiveView.HTMLFormatter],
   inputs: [
     "*.{heex,ex,exs}",
     "{config,lib,test}/**/*.{heex,ex,exs}",

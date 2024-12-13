@@ -100,7 +100,7 @@ defmodule VmemoWeb.PhotoUploadLive do
                     case entry.progress do
                       0 -> "opacity-100"
                       100 -> "opacity-0"
-                      _ -> "opacity-50"
+                      _ -> "opacity-50 TODO: glassmorphism"
                     end
                   ]}
                 />
@@ -116,13 +116,13 @@ defmodule VmemoWeb.PhotoUploadLive do
                   {index}
                 </.button>
               <% else %>
-                <div class="absolute inset-0  flex justify-center items-center">
+                <div class="absolute inset-0 flex justify-center items-center">
                   <div
                     class=" radial-progress text-white dark:text-black"
-                    style={"--value:#{entry.progress}; --size:3rem; --thickness: 4px;"}
+                    style={"--value:#{entry.progress}; --size:4rem; --thickness: 2px;"}
                     role="progressbar"
                   >
-                    <span class="sr-only">Uploading...</span>
+                    <span class="text-sm">{entry.progress}%</span>
                   </div>
                 </div>
               <% end %>

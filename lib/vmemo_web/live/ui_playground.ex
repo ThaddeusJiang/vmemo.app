@@ -1,26 +1,10 @@
-defmodule VmemoWeb.SurfacePlayLive do
-  use VmemoWeb, :surface_live_view
-
-  alias VmemoWeb.Ui.Box
-  alias VmemoWeb.Ui.Button
-  alias VmemoWeb.HelloComponent
+defmodule VmemoWeb.Live.UiPlayground do
+  use VmemoWeb, :live_view
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
       <h1>Hello, LiveView!</h1>
-
-      <HelloComponent>
-        I am a slot content
-      </HelloComponent>
-
-      <Box>
-        hello, box
-      </Box>
-
-      <Button type="submit">
-        Click me
-      </Button>
 
       <div class="flex flex-col space-y-4 justify-start">
         <h1>buttons</h1>

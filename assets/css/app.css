@@ -32,4 +32,14 @@
     .btn-outline:hover {
         @apply bg-base-200 border-base-300 text-base-content;
     }
+
+    .btn-circle {
+        @apply ring-1 ring-base-100;
+    }
+
+    .btn-circle:where(.btn-xs) {
+        height: 1.5rem;
+        width: 1.5rem;
+        min-height: 1.5rem;
+    }
 }

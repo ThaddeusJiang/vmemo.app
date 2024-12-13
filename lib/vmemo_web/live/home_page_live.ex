@@ -4,19 +4,17 @@ defmodule VmemoWeb.HomePageLive do
 
   alias Vmemo.PhotoService.TsPhoto
 
+  alias VmemoWeb.Live.Components.WaterfallLc
+
   @impl true
   def mount(_params, _session, socket) do
     user_id = socket.assigns.current_user.id
-
-    col = 1
 
     socket =
       socket
       |> assign(:photos, load_photos("", 1, user_id))
       |> assign(:page, 1)
       |> assign(q: "")
-      |> assign(:window_width, 0)
-      |> assign(:col, col)
 
     {:ok, socket}
   end
@@ -33,22 +31,6 @@ defmodule VmemoWeb.HomePageLive do
      socket
      |> update(:photos, &(&1 ++ more_photos))
      |> assign(:page, page)}
-  end
-
-  @impl true
-  def handle_event("window_resize", %{"width" => width}, socket) do
-    col =
-      cond do
-        width >= 1024 -> 5
-        width >= 768 -> 4
-        width >= 640 -> 3
-        true -> 2
-      end
-
-    {:noreply,
-     socket
-     |> assign(:window_width, width)
-     |> assign(:col, col)}
   end
 
   defp load_photos(q, page, user_id) do
@@ -71,13 +53,6 @@ defmodule VmemoWeb.HomePageLive do
      |> assign(:q, q)}
   end
 
-  def split_list(list, n) do
-    list
-    |> Enum.with_index()
-    |> Enum.group_by(fn {_elem, index} -> rem(index, n) end)
-    |> Enum.map(fn {_key, group} -> Enum.map(group, &elem(&1, 0)) end)
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -94,32 +69,13 @@ defmodule VmemoWeb.HomePageLive do
         <%!-- search when typing --%>
       </form>
 
-      <%= if Enum.empty?(@photos) do %>
-        <div class="text-center text-zinc-500">No photos found</div>
-      <% else %>
-        <div id="photos" phx-hook="WindowResizer">
-          <div class={
-          "grid gap-3"
-          <> case @col do
-            5 -> " grid-cols-5"
-            4 -> " grid-cols-4"
-            3 -> " grid-cols-3"
-            2 -> " grid-cols-2"
-            _ -> " hidden"
-          end
-        }>
-            <div :for={photos <- @photos |> split_list(@col)} class="space-y-3">
-              <.link
-                :for={photo <- photos}
-                navigate={~p"/photos/#{photo.id}"}
-                class="link link-hover block"
-              >
-                <.img src={photo.url} alt={photo.note} />
-              </.link>
-            </div>
-          </div>
-        </div>
-      <% end %>
+      <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos}>
+        <:card :let={photo}>
+          <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
+            <.img src={photo.url} alt={photo.note} />
+          </.link>
+        </:card>
+      </.live_component>
 
       <div phx-hook="InfiniteScroll" id="infinite-scroll"></div>
     </div>

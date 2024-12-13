@@ -76,7 +76,7 @@ defmodule VmemoWeb.Router do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
-      live "/ui", SurfacePlayLive
+      live "/ui", Live.UiPlayground
     end
   end
 

@@ -52,22 +52,7 @@ defmodule VmemoWeb.PhotoIdLive do
   def render(assigns) do
     ~H"""
     <%= if @photo == nil do %>
-      <main class="mx-auto flex w-full max-w-7xl flex-auto flex-col justify-center sm:items-center px-6 py-24 lg:px-8">
-        <p class="text-base/8 font-semibold text-indigo-600">
-          <img src="/images/undraw_taken.svg" alt="404" class="w-60 h-60 mx-auto" />
-        </p>
-        <h1 class="mt-4 text-pretty text-5xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
-          Page not found
-        </h1>
-        <p class="mt-6 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
-          Sorry, we couldn’t find the page you’re looking for.
-        </p>
-        <div class="mt-10">
-          <a href="/" class="text-sm/7 font-semibold text-indigo-600">
-            <span aria-hidden="true">&larr;</span> Back to home
-          </a>
-        </div>
-      </main>
+      <.not_found />
     <% else %>
       <div class=" flex flex-col space-y-10 mx-auto sm:max-w-screen-md">
         <div class=" gap-4 space-y-4 sm:grid sm:grid-cols-2 sm:space-y-0 max-h-[60%] ">

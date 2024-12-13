@@ -1,6 +1,4 @@
 /* Import scoped CSS rules for components */
-@import "./_components.css";
-
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";

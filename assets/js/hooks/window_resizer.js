@@ -1,7 +1,7 @@
 export const WindowResizer = {
     mounted() {
         const sendElWidth = () => {
-            this.pushEvent("window_resize", {
+            this.pushEventTo(this.el, "window_resize", {
                 width: window.innerWidth,
             })
         }

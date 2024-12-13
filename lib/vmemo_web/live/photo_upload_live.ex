@@ -106,15 +106,15 @@ defmodule VmemoWeb.PhotoUploadLive do
                 />
               </figure>
               <%= if entry.progress == 0 do %>
-                <button
+                <.button
                   type="button"
                   phx-click="cancel-upload"
                   phx-value-ref={entry.ref}
                   aria-label="cancel"
-                  class="absolute top-2 right-1 btn btn-xs btn-circle btn-info"
+                  class="absolute top-1 right-1 btn-xs btn-circle btn-info"
                 >
-                  <%= index %>
-                </button>
+                  {index}
+                </.button>
               <% else %>
                 <div class="absolute inset-0  flex justify-center items-center">
                   <div
@@ -157,7 +157,7 @@ defmodule VmemoWeb.PhotoUploadLive do
       </label>
 
       <p :for={err <- upload_errors(@uploads.photos)} class="alert alert-danger">
-        <%= error_to_string(err) %>
+        {error_to_string(err)}
       </p>
 
       <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">

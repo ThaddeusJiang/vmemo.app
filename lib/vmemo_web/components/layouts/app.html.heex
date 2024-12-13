@@ -31,7 +31,7 @@
           <div class="avatar placeholder online">
             <div class="bg-neutral text-neutral-content w-8 rounded-full">
               <span>
-                <%= String.at(@current_user.display_name || @current_user.email, 0) %>
+                {String.at(@current_user.display_name || @current_user.email, 0)}
               </span>
             </div>
           </div>
@@ -65,6 +65,6 @@
 
   <div class=" grow flex flex-col p-4 sm:py-8 -mt-1 ">
     <.flash_group flash={@flash} />
-    <%= @inner_content %>
+    {@inner_content}
   </div>
 </main>

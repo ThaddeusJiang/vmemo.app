@@ -59,13 +59,9 @@ defmodule VmemoWeb.Live.Components.WaterfallLc do
             end
           ]}>
             <div :for={items <- @items |> split_list(@col)} class="space-y-3">
-              <.link
-                :for={photo <- items}
-                navigate={~p"/photos/#{photo.id}"}
-                class="link link-hover block"
-              >
-                <.img src={photo.url} alt={photo.note} />
-              </.link>
+              <%= for item <- items do %>
+                {render_slot(@card, item)}
+              <% end %>
             </div>
           </div>
         </div>

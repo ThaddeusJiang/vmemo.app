@@ -84,7 +84,13 @@ defmodule VmemoWeb.PhotoIdLive do
           Similar photos
         </h2>
 
-        <.live_component id="similar-photos" module={WaterfallLc} items={@photos} />
+        <.live_component id="similar-photos" module={WaterfallLc} items={@photos}>
+          <:card :let={photo}>
+            <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
+              <.img src={photo.url} alt={photo.note} />
+            </.link>
+          </:card>
+        </.live_component>
       </div>
     </div>
     """

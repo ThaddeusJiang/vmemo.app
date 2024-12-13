@@ -69,7 +69,13 @@ defmodule VmemoWeb.HomePageLive do
         <%!-- search when typing --%>
       </form>
 
-      <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos} />
+      <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos}>
+        <:card :let={photo}>
+          <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
+            <.img src={photo.url} alt={photo.note} />
+          </.link>
+        </:card>
+      </.live_component>
 
       <div phx-hook="InfiniteScroll" id="infinite-scroll"></div>
     </div>

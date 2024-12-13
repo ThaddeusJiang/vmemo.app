@@ -40,6 +40,9 @@ defmodule VmemoWeb.Live.Components.WaterfallLc do
     |> Enum.map(fn {_key, group} -> Enum.map(group, &elem(&1, 0)) end)
   end
 
+  slot :card, required: true
+  slot :empty, required: false
+
   @impl true
   def render(assigns) do
     ~H"""

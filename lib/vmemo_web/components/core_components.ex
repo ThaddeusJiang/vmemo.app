@@ -685,4 +685,31 @@ defmodule VmemoWeb.CoreComponents do
     />
     """
   end
+
+  @doc """
+  Not found UI component.
+
+  ## Examples
+
+      <.not_found />
+  """
+  def not_found(assigns) do
+    ~H"""
+    <main class="mx-auto flex w-full max-w-7xl flex-auto flex-col justify-center sm:items-center px-6 py-24 lg:px-8">
+      <img src="/images/undraw_taken.svg" alt="not found" class="w-60 h-60 mx-auto" />
+
+      <h1 class="mt-4 text-pretty text-5xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
+        Page not found
+      </h1>
+      <p class="mt-6 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
+        Sorry, we couldn’t find the page you’re looking for.
+      </p>
+      <div class="mt-10">
+        <.link navigate="/" class="text-sm/7 font-semibold text-indigo-600">
+          <span aria-hidden="true">&larr;</span> Back to home
+        </.link>
+      </div>
+    </main>
+    """
+  end
 end

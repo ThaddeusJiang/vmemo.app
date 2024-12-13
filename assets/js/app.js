@@ -15,7 +15,6 @@
 //     import "some-package"
 //
 
-import Hooks from "./_hooks"
 import { WindowResizer } from "./hooks/window_resizer"
 import { InfiniteScroll } from "./hooks/infinite_scroll"
 import { ImageLoader } from "./hooks/image_loader"
@@ -31,7 +30,6 @@ import topbar from "../vendor/topbar"
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   hooks: {
-    ...Hooks,
     WindowResizer,
     InfiniteScroll,
     ImageLoader,

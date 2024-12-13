@@ -43,9 +43,13 @@ defmodule VmemoWeb.Live.Components.WaterfallLc do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div class="w-full h-full">
       <%= if Enum.empty?(@items) do %>
-        <div class="text-center text-gray-500 mt-5">No photos found.</div>
+        <%= if @empty do %>
+          {render_slot(@empty)}
+        <% else %>
+          <div class="text-center text-gray-500 mt-5">No photos found.</div>
+        <% end %>
       <% else %>
         <div id={@id} phx-hook="WindowResizer" phx-target={@myself}>
           <div class={[

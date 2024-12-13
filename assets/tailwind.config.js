@@ -37,7 +37,8 @@ module.exports = {
           accent: "#18181b", // 主要使用，但是不是 brand color, 例如提交按钮
           "accent-content": "#fafafa",
 
-          info: "#0366d6", // 信息色（GitHub蓝）
+          info: "#0969da", // 信息色（GitHub蓝）
+          "info-content": "#ffffff", // 信息色文本
           success: "#28a745", // 成功色
           warning: "#d73a49", // 警告色
           error: "#cb2431", // 错误色

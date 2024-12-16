@@ -581,6 +581,12 @@ defmodule VmemoWeb.CoreComponents do
     """
   end
 
+  def generate_id(length \\ 16) do
+    :crypto.strong_rand_bytes(length)
+    |> Base.encode16(case: :lower)
+    |> binary_part(0, length)
+  end
+
   ## JS Commands
 
   def show(js \\ %JS{}, selector) do
@@ -661,6 +667,7 @@ defmodule VmemoWeb.CoreComponents do
   attr :src, :string, required: true
   attr :alt, :string, required: true
   attr :class, :string, default: nil
+  attr :id, :string, default: nil
   # arbitrary HTML attributes
   attr :rest, :global
 
@@ -680,6 +687,8 @@ defmodule VmemoWeb.CoreComponents do
         "w-full h-auto object-cover rounded-lg shadow hover:shadow-lg hover:transition-transform",
         @class
       ]}
+      id={@id || generate_id()}
+      phx-hook="ImageLoader"
       {@rest}
     />
     """

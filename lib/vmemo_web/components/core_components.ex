@@ -117,6 +117,7 @@ defmodule VmemoWeb.CoreComponents do
         @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
       ]}
+      phx-hook="Toast"
       {@rest}
     >
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
@@ -146,7 +147,7 @@ defmodule VmemoWeb.CoreComponents do
     <div id={@id}>
       <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
       <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
-      <.flash
+      <%!-- <.flash
         id="client-error"
         kind={:error}
         title={gettext("We can't find the internet")}
@@ -168,7 +169,7 @@ defmodule VmemoWeb.CoreComponents do
       >
         {gettext("Hang in there while we get back on track")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
-      </.flash>
+      </.flash> --%>
     </div>
     """
   end
@@ -236,7 +237,7 @@ defmodule VmemoWeb.CoreComponents do
         @variant == "submit" && "btn-accent",
         @variant == "ghost" && "btn-ghost",
         @variant == "danger" && "btn-error",
-        @variant == "outline" && "btn-outline",
+        @variant == "outline" && "btn-outline bg-base-100 text-base-content",
         @class
       ]}
       {@rest}

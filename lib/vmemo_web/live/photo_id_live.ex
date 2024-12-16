@@ -46,7 +46,9 @@ defmodule VmemoWeb.PhotoIdLive do
   def handle_event("update_note", %{"note" => note}, socket) do
     {:ok, _} = TsPhoto.update_note(socket.assigns.photo.id, note)
 
-    {:noreply, socket}
+    {:noreply,
+     socket
+     |> put_flash(:info, "Updated")}
   end
 
   @impl true
@@ -78,6 +80,7 @@ defmodule VmemoWeb.PhotoIdLive do
                 variant="danger"
                 phx-click="delete_photo"
                 phx-value-id={@photo.id}
+                data-confirm="You can't undo this action. Are you sure?"
                 class="absolute top-2 right-2 btn-circle hidden group-hover:block"
                 aria-label={gettext("delete")}
               >
@@ -99,7 +102,7 @@ defmodule VmemoWeb.PhotoIdLive do
               <.button
                 variant="outline"
                 phx-click="show_expanded"
-                class=" absolute bottom-2 right-2 btn-circle text-white"
+                class=" absolute bottom-2 right-2 btn-circle hidden group-hover:block"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

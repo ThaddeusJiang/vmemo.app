@@ -99,38 +99,66 @@ defmodule VmemoWeb.PhotoUploadLive do
             <:card :let={entry}>
               <article class="upload-entry relative">
                 <figure>
-                  <.live_img_preview
-                    entry={entry}
-                    class={[
-                      "h-auto w-full object-cover rounded-lg",
-                      case entry.progress do
-                        0 -> "opacity-100"
-                        100 -> "opacity-0"
-                        _ -> "opacity-50 TODO: glassmorphism"
-                      end
-                    ]}
-                  />
+                  <.live_img_preview entry={entry} />
                 </figure>
-                <%= if entry.progress == 0 do %>
-                  <.button
-                    type="button"
-                    phx-click="cancel-upload"
-                    phx-value-ref={entry.ref}
-                    aria-label="cancel"
-                    class="absolute top-1 right-1 btn btn-xs btn-circle btn-info"
-                  >
-                    &times;
-                  </.button>
-                <% else %>
-                  <div class="absolute inset-0 flex justify-center items-center">
-                    <div
-                      class=" radial-progress text-white dark:text-black"
-                      style={"--value:#{entry.progress}; --size:4rem; --thickness: 2px;"}
-                      role="progressbar"
+
+                <%= case entry.progress do %>
+                  <% 0 -> %>
+                    <.button
+                      type="button"
+                      phx-click="cancel-upload"
+                      phx-value-ref={entry.ref}
+                      aria-label="cancel"
+                      class="absolute top-1 right-1 btn btn-xs btn-circle btn-info"
                     >
-                      <span class="text-sm">{entry.progress}%</span>
+                      &times;
+                    </.button>
+                  <% 100 -> %>
+                    <div class="absolute inset-0 flex justify-center items-center backdrop-blur-sm ">
+                      <div
+                        class=" radial-progress text-white dark:text-black"
+                        style="--value:100; --size:2rem; --thickness: 2px;"
+                        role="progressbar"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          class="size-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m4.5 12.75 6 6 9-13.5"
+                          />
+                        </svg>
+                      </div>
                     </div>
-                  </div>
+                  <% _ -> %>
+                    <div class="absolute inset-0 flex justify-center items-center backdrop-blur-sm ">
+                      <div
+                        class=" radial-progress text-white dark:text-black"
+                        style={"--value:#{entry.progress}; --size:2rem; --thickness: 2px;"}
+                        role="progressbar"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          class="size-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m4.5 12.75 6 6 9-13.5"
+                          />
+                        </svg>
+                      </div>
+                    </div>
                 <% end %>
               </article>
             </:card>

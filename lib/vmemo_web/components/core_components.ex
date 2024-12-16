@@ -66,18 +66,16 @@ defmodule VmemoWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl  p-14 shadow-lg ring-1 transition"
+              class="relative transition"
             >
-              <div class="absolute top-6 right-5">
-                <button
-                  phx-click={JS.exec("data-cancel", to: "##{@id}")}
-                  type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
-                  aria-label={gettext("close")}
-                >
-                  <.icon name="hero-x-mark-solid" class="h-5 w-5" />
-                </button>
-              </div>
+              <.button
+                phx-click={JS.exec("data-cancel", to: "##{@id}")}
+                class="absolute top-3 right-3 btn-circle "
+                aria-label={gettext("close")}
+              >
+                <.icon name="hero-x-mark-solid" class="h-5 w-5" />
+              </.button>
+
               <div id={"#{@id}-content"}>
                 {render_slot(@inner_block)}
               </div>
@@ -119,6 +117,7 @@ defmodule VmemoWeb.CoreComponents do
         @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
       ]}
+      phx-hook="Toast"
       {@rest}
     >
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
@@ -148,7 +147,7 @@ defmodule VmemoWeb.CoreComponents do
     <div id={@id}>
       <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
       <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
-      <.flash
+      <%!-- <.flash
         id="client-error"
         kind={:error}
         title={gettext("We can't find the internet")}
@@ -170,7 +169,7 @@ defmodule VmemoWeb.CoreComponents do
       >
         {gettext("Hang in there while we get back on track")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
-      </.flash>
+      </.flash> --%>
     </div>
     """
   end
@@ -238,7 +237,7 @@ defmodule VmemoWeb.CoreComponents do
         @variant == "submit" && "btn-accent",
         @variant == "ghost" && "btn-ghost",
         @variant == "danger" && "btn-error",
-        @variant == "outline" && "btn-outline",
+        @variant == "outline" && "btn-outline bg-base-100 text-base-content",
         @class
       ]}
       {@rest}
@@ -582,6 +581,12 @@ defmodule VmemoWeb.CoreComponents do
     """
   end
 
+  def generate_id(length \\ 16) do
+    :crypto.strong_rand_bytes(length)
+    |> Base.encode16(case: :lower)
+    |> binary_part(0, length)
+  end
+
   ## JS Commands
 
   def show(js \\ %JS{}, selector) do
@@ -662,6 +667,7 @@ defmodule VmemoWeb.CoreComponents do
   attr :src, :string, required: true
   attr :alt, :string, required: true
   attr :class, :string, default: nil
+  attr :id, :string, default: nil
   # arbitrary HTML attributes
   attr :rest, :global
 
@@ -678,9 +684,11 @@ defmodule VmemoWeb.CoreComponents do
       src={@src}
       alt={@alt}
       class={[
-        "w-full h-auto object-cover rounded-lg shadow hover:shadow-lg hover:scale-105 hover: transition-transform",
+        "w-full h-auto object-cover rounded-lg shadow hover:shadow-lg hover:transition-transform",
         @class
       ]}
+      id={@id || generate_id()}
+      phx-hook="ImageLoader"
       {@rest}
     />
     """

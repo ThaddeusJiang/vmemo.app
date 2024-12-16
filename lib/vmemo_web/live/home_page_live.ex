@@ -72,7 +72,7 @@ defmodule VmemoWeb.HomePageLive do
       <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos}>
         <:card :let={photo}>
           <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
-            <.img src={photo.url} alt={photo.note} />
+            <.img src={photo.url} alt={photo.note} id={photo.id} />
           </.link>
         </:card>
       </.live_component>

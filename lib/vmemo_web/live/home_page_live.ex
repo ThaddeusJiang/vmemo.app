@@ -39,6 +39,16 @@ defmodule VmemoWeb.HomePageLive do
   end
 
   @impl true
+  def handle_event("clean_photos", _params, socket) do
+    socket =
+      Enum.reduce(socket.assigns.uploads.photos.entries, socket, fn entry, acc_socket ->
+        cancel_upload(acc_socket, :photos, entry.ref)
+      end)
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do
     {:noreply, cancel_upload(socket, :photos, ref)}
   end
@@ -112,11 +122,36 @@ defmodule VmemoWeb.HomePageLive do
   def render(assigns) do
     ~H"""
     <div
-      class="flex flex-col gap-4 w-full max-w-screen-lg mx-auto"
+      class="flex flex-col gap-4 w-full max-w-screen-lg mx-auto p-4 sm:py-6"
       phx-drop-target={@uploads.photos.ref}
     >
+      <%!-- search box --%>
+      <form action="/home" method="get">
+        <input
+          type="search"
+          name="q"
+          class="border border-zinc-200 rounded-lg px-2 py-1 text-zinc-900 w-full"
+          placeholder="Search"
+          value={@q}
+        />
+        <%!-- search when typing --%>
+      </form>
+
+      <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos}>
+        <:card :let={photo}>
+          <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
+            <.img src={photo.url} alt={photo.note} id={photo.id} />
+          </.link>
+        </:card>
+      </.live_component>
+
       <form id="uploadform" phx-submit="upload" phx-change="validate" phx-hook="ClipboardMediaFetcher">
-        <.modal :if={@uploads.photos.entries != []} id="upload-photos-modal" show>
+        <.modal
+          :if={length(@uploads.photos.entries) > 0}
+          id="upload-photos-modal"
+          show
+          on_cancel={JS.push("clean_photos")}
+        >
           <.live_component
             id="upload-photos-preview"
             module={WaterfallLc}
@@ -202,25 +237,6 @@ defmodule VmemoWeb.HomePageLive do
 
         <div phx-hook="InfiniteScroll" id="infinite-scroll"></div>
       </form>
-      <%!-- search box --%>
-      <form action="/home" method="get">
-        <input
-          type="search"
-          name="q"
-          class="border border-zinc-200 rounded-lg px-2 py-1 text-zinc-900 w-full"
-          placeholder="Search"
-          value={@q}
-        />
-        <%!-- search when typing --%>
-      </form>
-
-      <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos}>
-        <:card :let={photo}>
-          <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
-            <.img src={photo.url} alt={photo.note} id={photo.id} />
-          </.link>
-        </:card>
-      </.live_component>
     </div>
     """
   end

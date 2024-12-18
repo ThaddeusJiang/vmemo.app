@@ -1,6 +1,6 @@
 <main class="flex flex-col ">
-  <header class="px-4 sm:px-6 lg:px-8 flex-none">
-    <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+  <header class="px-4 sm:px-6 lg:px-8 flex-none ">
+    <div class="flex items-center justify-between border-b border-base-300 py-3 text-sm">
       <div class="flex items-center gap-4">
         <%= if @current_user do %>
           <.link href="/home" class="flex gap-4 items-center font-bold">
@@ -65,7 +65,7 @@
     </div>
   </header>
 
-  <div class=" grow flex flex-col p-4 sm:py-8 -mt-1 ">
+  <div class=" grow">
     <.flash_group flash={@flash} />
     {@inner_content}
   </div>

@@ -6,7 +6,7 @@ defmodule VmemoWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <div class="mx-auto w-full max-w-sm p-4 sm:py-6">
       <.header class="text-center">
         Register for an account
         <:subtitle>

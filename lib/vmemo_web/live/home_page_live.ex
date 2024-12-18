@@ -121,34 +121,16 @@ defmodule VmemoWeb.HomePageLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div
-      class="flex flex-col gap-4 w-full max-w-screen-lg mx-auto p-4 sm:py-6"
-      phx-drop-target={@uploads.photos.ref}
-    >
-      <%!-- search box --%>
-      <form action="/home" method="get">
-        <input
-          type="search"
-          name="q"
-          class="border border-zinc-200 rounded-lg px-2 py-1 text-zinc-900 w-full"
-          placeholder="Search"
-          value={@q}
-        />
-        <%!-- search when typing --%>
-      </form>
-
-      <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos}>
-        <:card :let={photo}>
-          <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
-            <.img src={photo.url} alt={photo.note} id={photo.id} />
-          </.link>
-        </:card>
-      </.live_component>
-
-      <form id="uploadform" phx-submit="upload" phx-change="validate" phx-hook="ClipboardMediaFetcher">
+    <main class="p-4 sm:py-6" phx-drop-target={@uploads.photos.ref}>
+      <form
+        id="photos-upload-form"
+        phx-submit="upload"
+        phx-change="validate"
+        phx-hook="ClipboardMediaFetcher"
+      >
         <.modal
           :if={length(@uploads.photos.entries) > 0}
-          id="upload-photos-modal"
+          id="photos-upload-modal"
           show
           on_cancel={JS.push("clean_photos")}
         >
@@ -234,10 +216,31 @@ defmodule VmemoWeb.HomePageLive do
           </:footer>
         </.modal>
         <.live_file_input upload={@uploads.photos} accept="image/*" class="hidden" />
+      </form>
+
+      <div class="flex flex-col gap-4 w-full max-w-screen-lg mx-auto">
+        <form action="/home" method="get">
+          <input
+            type="search"
+            name="q"
+            class="border border-zinc-200 rounded-lg px-2 py-1 text-zinc-900 w-full"
+            placeholder="Search"
+            value={@q}
+          />
+          <%!-- TODO: search when typing --%>
+        </form>
+
+        <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos}>
+          <:card :let={photo}>
+            <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
+              <.img src={photo.url} alt={photo.note} id={photo.id} />
+            </.link>
+          </:card>
+        </.live_component>
 
         <div phx-hook="InfiniteScroll" id="infinite-scroll"></div>
-      </form>
-    </div>
+      </div>
+    </main>
     """
   end
 

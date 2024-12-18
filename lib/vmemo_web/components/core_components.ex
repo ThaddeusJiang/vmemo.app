@@ -66,13 +66,13 @@ defmodule VmemoWeb.CoreComponents do
         tabindex="0"
       >
         <div class="h-full max-h-screen flex items-center justify-center">
-          <div class="w-full h-full max-w-screen-md max-h-screen p-6 lg:py-8 ">
+          <div class="w-full max-w-prose h-full max-h-screen p-6 lg:py-8 ">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="h-full max-h-max bg-base-100 rounded-lg shadow-lg p-8 lg:py-12 relative transition"
+              class="h-full max-h-max bg-base-100 rounded-box shadow-lg p-4 sm:py-6 relative transition"
             >
               <.button
                 phx-click={JS.exec("data-cancel", to: "##{@id}")}

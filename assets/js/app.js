@@ -15,7 +15,7 @@
 //     import "some-package"
 //
 
-import { WindowResizer } from "./hooks/window_resizer"
+import { Resizer } from "./hooks/resizer"
 import { InfiniteScroll } from "./hooks/infinite_scroll"
 import { ImageLoader } from "./hooks/image_loader"
 import { ClipboardMediaFetcher } from "./hooks/clipboard_media_fetcher"
@@ -31,7 +31,7 @@ import { LiveSocket } from "phoenix_live_view"
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   hooks: {
-    WindowResizer,
+    Resizer,
     InfiniteScroll,
     ImageLoader,
     ClipboardMediaFetcher,

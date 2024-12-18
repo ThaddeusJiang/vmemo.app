@@ -40,6 +40,8 @@ defmodule VmemoWeb.CoreComponents do
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
+  slot :footer, required: false
+  slot :header, required: false
 
   def modal(assigns) do
     ~H"""
@@ -50,34 +52,49 @@ defmodule VmemoWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
       <div
-        class="fixed inset-0 overflow-y-auto"
+        id={"#{@id}-bg"}
+        class="bg-zinc-800/90 fixed inset-0 transition-opacity"
+        aria-hidden="true"
+      />
+      <div
+        class="fixed inset-0 "
         aria-labelledby={"#{@id}-title"}
         aria-describedby={"#{@id}-description"}
         role="dialog"
         aria-modal="true"
         tabindex="0"
       >
-        <div class="flex min-h-full items-center justify-center">
-          <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
+        <div class="h-full max-h-screen flex items-center justify-center">
+          <div class="w-full h-full max-w-screen-md max-h-screen p-6 lg:py-8 ">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="relative transition"
+              class="h-full max-h-max bg-base-100 rounded-lg shadow-lg p-8 lg:py-12 relative transition"
             >
               <.button
                 phx-click={JS.exec("data-cancel", to: "##{@id}")}
-                class="absolute top-3 right-3 btn-circle "
+                variant="ghost"
+                class="absolute btn-circle top-2 right-2 "
                 aria-label={gettext("close")}
               >
                 <.icon name="hero-x-mark-solid" class="h-5 w-5" />
               </.button>
 
-              <div id={"#{@id}-content"}>
-                {render_slot(@inner_block)}
+              <div id={"#{@id}-content"} class="h-full max-h-max flex flex-col gap-4">
+                <header class="flex-none">
+                  {render_slot(@header)}
+                </header>
+
+                <div class="h-full overflow-y-auto max-h-max grow">
+                  {render_slot(@inner_block)}
+                </div>
+
+                <footer class="flex justify-center gap-4 flex-none">
+                  {render_slot(@footer)}
+                </footer>
               </div>
             </.focus_wrap>
           </div>
@@ -225,7 +242,10 @@ defmodule VmemoWeb.CoreComponents do
   """
   attr :variant, :string, default: "submit", values: ~w(submit ghost danger outline)
   attr :class, :string, default: nil
-  attr :rest, :global, include: ~w(disabled form name value type)
+  attr :type, :string, default: "button"
+
+  attr :rest, :global, include: ~w(disabled form name value)
+
   slot :inner_block, required: true
 
   def button(assigns) do
@@ -240,6 +260,7 @@ defmodule VmemoWeb.CoreComponents do
         @variant == "outline" && "btn-outline bg-base-100 text-base-content",
         @class
       ]}
+      type={@type}
       {@rest}
     >
       {render_slot(@inner_block)}

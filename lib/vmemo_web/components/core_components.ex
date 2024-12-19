@@ -391,6 +391,35 @@ defmodule VmemoWeb.CoreComponents do
     """
   end
 
+  attr :id, :string, required: true
+  attr :name, :string, required: true
+  attr :value, :string, default: nil
+  attr :rest, :global, default: nil
+
+  attr :label, :string, required: true
+  attr :errors, :list, default: []
+
+  def textarea_field(assigns) do
+    ~H"""
+    <div>
+      <.label for={@id}>{@label}</.label>
+      <.textarea id={@id} name={@name} />
+      <.error :for={msg <- @errors}>{msg}</.error>
+    </div>
+    """
+  end
+
+  attr :id, :string, required: true
+  attr :name, :string, required: true
+  attr :value, :string, default: nil
+  attr :rest, :global, default: nil
+
+  def textarea(assigns) do
+    ~H"""
+    <textarea id={@id} name={@name} class=" textarea textarea-bordered min-h-[3lh] " {@rest}>{Phoenix.HTML.Form.normalize_value("textarea", @value)}</textarea>
+    """
+  end
+
   @doc """
   Renders a label.
   """

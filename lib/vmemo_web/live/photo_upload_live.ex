@@ -208,7 +208,14 @@ defmodule VmemoWeb.PhotoUploadLive do
           {error_to_string(err)}
         </p>
 
-        <.input field={@upload_form[:note]} label="Note" />
+        <div :if={Enum.count(@uploads.photos.entries) > 0} class="mt-4">
+          <.label for={@upload_form[:note].id}>Note</.label>
+          <textarea
+            id={@upload_form[:note].id}
+            name={@upload_form[:note].name}
+            class="textarea textarea-bordered min-h-[3lh] "
+          ><%= Phoenix.HTML.Form.normalize_value("textarea", @upload_form[:note].value) %></textarea>
+        </div>
 
         <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">
           <.button>Upload</.button>

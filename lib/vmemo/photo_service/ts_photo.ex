@@ -42,6 +42,30 @@ defmodule Vmemo.PhotoService.TsPhoto do
     end
   end
 
+  def get(id, :notes) do
+    {:ok, photo} = Typesense.get_document(@collection_name, id)
+
+    photo =
+      case photo do
+        nil -> nil
+        _ -> parse(photo)
+      end
+
+    req = Typesense.build_request("/collections/notes/documents/search")
+
+    res =
+      Req.get(req,
+        params: [
+          q: "*",
+          filter_by: "photo_ids:#{id}"
+        ]
+      )
+
+    {:ok, notes} = Typesense.handle_search_res(res)
+
+    {:ok, %{photo: photo, notes: notes |> Enum.map(&Vmemo.PhotoService.TsNote.parse/1)}}
+  end
+
   def update_photo(photo) do
     Typesense.update_document(@collection_name, photo)
   end

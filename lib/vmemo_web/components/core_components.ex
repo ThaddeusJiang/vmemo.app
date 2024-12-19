@@ -242,9 +242,7 @@ defmodule VmemoWeb.CoreComponents do
   """
   attr :variant, :string, default: "submit", values: ~w(submit ghost danger outline)
   attr :class, :string, default: nil
-  attr :type, :string, default: "button"
-
-  attr :rest, :global, include: ~w(disabled form name value)
+  attr :rest, :global, include: ~w(disabled form name value type  )
 
   slot :inner_block, required: true
 
@@ -260,7 +258,6 @@ defmodule VmemoWeb.CoreComponents do
         @variant == "outline" && "btn-outline bg-base-100 text-base-content",
         @class
       ]}
-      type={@type}
       {@rest}
     >
       {render_slot(@inner_block)}

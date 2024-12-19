@@ -66,13 +66,13 @@ defmodule VmemoWeb.CoreComponents do
         tabindex="0"
       >
         <div class="h-full max-h-screen flex items-center justify-center">
-          <div class="w-full h-full max-w-screen-md max-h-screen p-6 lg:py-8 ">
+          <div class="w-full max-w-prose h-full max-h-screen p-6 lg:py-8 ">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="h-full max-h-max bg-base-100 rounded-lg shadow-lg p-8 lg:py-12 relative transition"
+              class="h-full max-h-max bg-base-100 rounded-box shadow-lg p-4 sm:py-6 relative transition"
             >
               <.button
                 phx-click={JS.exec("data-cancel", to: "##{@id}")}
@@ -242,9 +242,7 @@ defmodule VmemoWeb.CoreComponents do
   """
   attr :variant, :string, default: "submit", values: ~w(submit ghost danger outline)
   attr :class, :string, default: nil
-  attr :type, :string, default: "button"
-
-  attr :rest, :global, include: ~w(disabled form name value)
+  attr :rest, :global, include: ~w(disabled form name value type  )
 
   slot :inner_block, required: true
 
@@ -260,7 +258,6 @@ defmodule VmemoWeb.CoreComponents do
         @variant == "outline" && "btn-outline bg-base-100 text-base-content",
         @class
       ]}
-      type={@type}
       {@rest}
     >
       {render_slot(@inner_block)}
@@ -724,7 +721,7 @@ defmodule VmemoWeb.CoreComponents do
   """
   def not_found(assigns) do
     ~H"""
-    <main class="mx-auto flex w-full max-w-7xl flex-auto flex-col justify-center sm:items-center px-6 py-24 lg:px-8">
+    <div class="mx-auto flex w-full max-w-7xl flex-auto flex-col justify-center sm:items-center px-6 py-24 lg:px-8">
       <img src="/images/undraw_taken.svg" alt="not found" class="w-60 h-60 mx-auto" />
 
       <h1 class="mt-4 text-pretty text-5xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
@@ -738,7 +735,7 @@ defmodule VmemoWeb.CoreComponents do
           <span aria-hidden="true">&larr;</span> Back to home
         </.link>
       </div>
-    </main>
+    </div>
     """
   end
 end

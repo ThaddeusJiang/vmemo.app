@@ -104,6 +104,7 @@ defmodule VmemoWeb.PhotoIdLive do
                   variant="outline"
                   phx-click="show_expanded"
                   class=" absolute bottom-2 right-2 btn-circle hidden group-hover:block"
+                  aria-label={gettext("expand")}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -124,9 +125,7 @@ defmodule VmemoWeb.PhotoIdLive do
                 name={@note_form[:note].name}
                 class="p-2 text-lg border border-gray-300 rounded shadow"
               ><%= Phoenix.HTML.Form.normalize_value("textarea", @note_form[:note].value) %></textarea>
-              <button type="submit" class="btn btn-accent w-full" phx-disable-with="Updating">
-                Update
-              </button>
+              <.button phx-disable-with="Updating">Update</.button>
             </.form>
           </div>
 

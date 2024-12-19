@@ -19,3 +19,11 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 ## Deploy
 
 [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/H3EL85)
+
+## Changelog
+
+ ### 2024-12-19
+
+ ```sh
+ mix run priv/ts/2024-12-19.exs
+ ```

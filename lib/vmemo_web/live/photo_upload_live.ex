@@ -2,6 +2,7 @@ defmodule VmemoWeb.PhotoUploadLive do
   use VmemoWeb, :live_view
 
   alias Vmemo.PhotoService
+  alias Vmemo.PhotoService.TsNote
   alias VmemoWeb.Live.Components.WaterfallLc
 
   @impl true
@@ -14,6 +15,11 @@ defmodule VmemoWeb.PhotoUploadLive do
         # max_files: 5,
         # max_file_size: 10_000_000
       )
+      |> assign_new(:upload_form, fn ->
+        to_form(%{
+          "note" => ""
+        })
+      end)
 
     {:ok, socket}
   end
@@ -29,31 +35,54 @@ defmodule VmemoWeb.PhotoUploadLive do
   end
 
   @impl true
-  def handle_event("save", _params, socket) do
+  def handle_event(
+        "save",
+        %{"note" => note_text},
+        socket
+      ) do
     user_id = socket.assigns.current_user.id
+
+    # TODO: TDD
+    # 1. create ts_note get note_id
+    {:ok, note} =
+      TsNote.create(%{
+        text: note_text,
+        belongs_to: user_id |> Integer.to_string()
+      })
+
+    # 2. create ts_photo get photo_id
+    # 3. update ts_note with photo_id
+    # TODO: TDD
+    # 1. get ts_photo with note_ids
+    # 2. UI for note_ids (note_text as Title or summary)
+    # 3. UI for note (show text and photos)
 
     case uploaded_entries(socket, :photos) do
       {[_ | _] = entries, []} ->
-        _uploaded_photos =
+        ts_photos =
           for entry <- entries do
-            file_path =
+            ts_photo =
               consume_uploaded_entry(socket, entry, fn %{path: path} ->
                 filename = entry.uuid <> Path.extname(entry.client_name)
 
                 {:ok, dest} = PhotoService.cp_file(path, user_id, filename)
 
-                PhotoService.create_ts_photo(%{
-                  image: read_image_base64(dest),
-                  note: "",
-                  url: Path.join("/", dest),
-                  inserted_by: user_id |> Integer.to_string()
-                })
+                {:ok, ts_photo} =
+                  PhotoService.create_ts_photo(%{
+                    image: read_image_base64(dest),
+                    note: note_text,
+                    note_ids: [note["id"]],
+                    url: Path.join("/", dest),
+                    inserted_by: user_id |> Integer.to_string()
+                  })
 
-                {:ok, dest}
+                {:ok, ts_photo}
               end)
 
-            {:ok, file_path}
+            ts_photo
           end
+
+        TsNote.update_photo_ids(note["id"], Enum.map(ts_photos, & &1["id"]))
 
         {:noreply,
          socket
@@ -178,6 +207,8 @@ defmodule VmemoWeb.PhotoUploadLive do
         <p :for={err <- upload_errors(@uploads.photos)} class="alert alert-danger">
           {error_to_string(err)}
         </p>
+
+        <.input field={@upload_form[:note]} label="Note" />
 
         <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">
           <.button>Upload</.button>

@@ -62,6 +62,14 @@ defmodule VmemoWeb.HomePageLive do
   def handle_event("upload", _params, socket) do
     user_id = socket.assigns.current_user.id
 
+    # TODO: TDD
+    # 1. create ts_note get note_id
+    # 2. create ts_photo get photo_id
+    # 3. update ts_note with photo_id
+    # TODO: TDD
+    # 1. get ts_photo with note_ids
+    # 2. UI for note_ids (note_text as Title or summary)
+    # 3. UI for note (show text and photos)
     case uploaded_entries(socket, :photos) do
       {[_ | _] = entries, []} ->
         _uploaded_photos =

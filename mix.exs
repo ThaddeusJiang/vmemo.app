@@ -74,10 +74,9 @@ defmodule Vmemo.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "ts.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "ts.reset", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "ts.setup": ["run priv/ts/setup.exs"],
       "ts.reset": ["run priv/ts/reset.exs"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],

@@ -16,6 +16,7 @@ defmodule Vmemo.PhotoService do
         %{
           image: image,
           note: note,
+          note_ids: note_ids,
           url: url,
           inserted_by: inserted_by
         } = _photo
@@ -25,6 +26,7 @@ defmodule Vmemo.PhotoService do
     Vmemo.PhotoService.TsPhoto.create_photo(%{
       image: image,
       note: note,
+      note_ids: note_ids,
       url: url,
       inserted_at: inserted_at,
       inserted_by: inserted_by

@@ -71,6 +71,8 @@ defmodule VmemoWeb.Router do
       live "/photos/:id", PhotoIdLive
       # live "/home/upload", HomePageLive, :upload
 
+      live "/notes/:id", NoteIdLive
+
       live "/upload", PhotoUploadLive
 
       live "/users/settings", UserSettingsLive, :edit

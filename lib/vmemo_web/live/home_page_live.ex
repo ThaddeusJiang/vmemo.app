@@ -121,7 +121,7 @@ defmodule VmemoWeb.HomePageLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <main class="p-4 sm:py-6 grow" phx-drop-target={@uploads.photos.ref}>
+    <section class="p-4 sm:py-6 grow" phx-drop-target={@uploads.photos.ref}>
       <form
         id="photos-upload-form"
         phx-submit="upload"
@@ -254,7 +254,7 @@ defmodule VmemoWeb.HomePageLive do
 
         <div phx-hook="InfiniteScroll" id="infinite-scroll"></div>
       </div>
-    </main>
+    </section>
     """
   end
 

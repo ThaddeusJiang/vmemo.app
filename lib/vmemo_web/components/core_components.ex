@@ -721,7 +721,7 @@ defmodule VmemoWeb.CoreComponents do
   """
   def not_found(assigns) do
     ~H"""
-    <main class="mx-auto flex w-full max-w-7xl flex-auto flex-col justify-center sm:items-center px-6 py-24 lg:px-8">
+    <div class="mx-auto flex w-full max-w-7xl flex-auto flex-col justify-center sm:items-center px-6 py-24 lg:px-8">
       <img src="/images/undraw_taken.svg" alt="not found" class="w-60 h-60 mx-auto" />
 
       <h1 class="mt-4 text-pretty text-5xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
@@ -735,7 +735,7 @@ defmodule VmemoWeb.CoreComponents do
           <span aria-hidden="true">&larr;</span> Back to home
         </.link>
       </div>
-    </main>
+    </div>
     """
   end
 end

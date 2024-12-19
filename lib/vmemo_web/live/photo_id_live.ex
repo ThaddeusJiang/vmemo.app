@@ -125,9 +125,7 @@ defmodule VmemoWeb.PhotoIdLive do
                 name={@note_form[:note].name}
                 class="p-2 text-lg border border-gray-300 rounded shadow"
               ><%= Phoenix.HTML.Form.normalize_value("textarea", @note_form[:note].value) %></textarea>
-              <button type="submit" class="btn btn-accent w-full" phx-disable-with="Updating">
-                Update
-              </button>
+              <.button phx-disable-with="Updating">Update</.button>
             </.form>
           </div>
 

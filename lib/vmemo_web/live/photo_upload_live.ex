@@ -72,7 +72,7 @@ defmodule VmemoWeb.PhotoUploadLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <main class="p-4 sm:py-6" phx-drop-target={@uploads.photos.ref}>
+    <section class="p-4 sm:py-6" phx-drop-target={@uploads.photos.ref}>
       <form
         id="upload-form"
         phx-submit="save"
@@ -183,7 +183,7 @@ defmodule VmemoWeb.PhotoUploadLive do
           <.button>Upload</.button>
         </footer>
       </form>
-    </main>
+    </section>
     """
   end
 

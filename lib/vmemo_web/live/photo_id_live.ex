@@ -24,7 +24,7 @@ defmodule VmemoWeb.PhotoIdLive do
         |> assign(notes: notes)
         |> assign(show_expanded: false)
         |> assign(photos: photos)
-        |> assign_new(:note_form, fn ->
+        |> assign_new(:form, fn ->
           to_form(%{
             "note" => photo.note
           })
@@ -121,12 +121,13 @@ defmodule VmemoWeb.PhotoIdLive do
               </figure>
             </div>
 
-            <.form class=" w-full flex flex-col gap-4 " for={@note_form} phx-submit="update_note">
-              <textarea
-                id={@note_form[:note].id}
-                name={@note_form[:note].name}
-                class="p-2 text-lg border border-gray-300 rounded shadow"
-              ><%= Phoenix.HTML.Form.normalize_value("textarea", @note_form[:note].value) %></textarea>
+            <.form class=" w-full flex flex-col gap-4 " for={@form} phx-submit="update_note">
+              <.textarea_field
+                id={@form[:note].id}
+                name={@form[:note].name}
+                value={@form[:note].value}
+                label="Note"
+              />
               <.button phx-disable-with="Updating">Update</.button>
             </.form>
           </div>

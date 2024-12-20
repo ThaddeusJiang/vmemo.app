@@ -219,9 +219,9 @@ defmodule VmemoWeb.CoreComponents do
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div class="mt-8 space-y-4 ">
         {render_slot(@inner_block, f)}
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <footer :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           {render_slot(action, f)}
-        </div>
+        </footer>
       </div>
     </.form>
     """
@@ -402,7 +402,7 @@ defmodule VmemoWeb.CoreComponents do
 
   def textarea_field(assigns) do
     ~H"""
-    <div>
+    <div class="grid w-full items-center gap-2">
       <.label for={@id}>{@label}</.label>
       <.textarea id={@id} name={@name} value={@value} />
       <.error :for={msg <- @errors}>{msg}</.error>

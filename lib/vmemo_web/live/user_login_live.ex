@@ -3,7 +3,7 @@ defmodule VmemoWeb.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto w-full max-w-sm p-4 sm:py-6">
+    <div class="mx-auto w-full max-w-md p-4 sm:py-6">
       <.header class="text-center">
         Log in to account
         <:subtitle>

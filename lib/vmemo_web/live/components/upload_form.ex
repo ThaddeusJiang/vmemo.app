@@ -37,7 +37,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
       phx-target={@myself}
       phx-submit="save"
       phx-change="validate"
-      class=" w-full mx-auto max-w-sm"
+      class=" w-full mx-auto max-w-md lg:max-w-lg"
       phx-hook="ClipboardMediaFetcher"
       phx-drop-target={@uploads.photos.ref}
     >
@@ -141,12 +141,12 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
       </p>
 
       <div :if={Enum.count(@uploads.photos.entries) > 0} class="mt-4">
-        <.label for={@form[:note].id}>Note</.label>
-        <textarea
+        <.textarea_field
           id={@form[:note].id}
           name={@form[:note].name}
-          class="textarea textarea-bordered min-h-[3lh] "
-        ><%= Phoenix.HTML.Form.normalize_value("textarea", @form[:note].value) %></textarea>
+          value={@form[:note].value}
+          label="Note"
+        />
       </div>
 
       <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">

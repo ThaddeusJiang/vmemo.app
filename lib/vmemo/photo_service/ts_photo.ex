@@ -10,7 +10,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
   @collection_name "photos"
 
-  defstruct [:id, :image, :note, :url, :file_id, :inserted_at, :inserted_by]
+  defstruct [:id, :image, :note, :note_ids, :url, :file_id, :inserted_at, :inserted_by]
 
   def parse(nil) do
     nil
@@ -21,6 +21,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
       id: photo["id"],
       image: photo["image"],
       note: photo["note"],
+      note_ids: photo["note_ids"],
       url: photo["url"],
       file_id: photo["file_id"],
       inserted_at: photo["inserted_at"],
@@ -28,8 +29,16 @@ defmodule Vmemo.PhotoService.TsPhoto do
     }
   end
 
-  def create_photo(photo) do
-    Typesense.create_document(@collection_name, photo)
+  def create(photo) do
+    now = DateTime.utc_now() |> DateTime.to_unix()
+
+    {:ok, document} =
+      Typesense.create_document(
+        @collection_name,
+        Map.put_new(photo, :inserted_at, now)
+      )
+
+    {:ok, parse(document)}
   end
 
   def get_photo(id) do
@@ -39,6 +48,30 @@ defmodule Vmemo.PhotoService.TsPhoto do
       nil -> nil
       _ -> parse(photo)
     end
+  end
+
+  def get(id, :notes) do
+    {:ok, photo} = Typesense.get_document(@collection_name, id)
+
+    photo =
+      case photo do
+        nil -> nil
+        _ -> parse(photo)
+      end
+
+    req = Typesense.build_request("/collections/notes/documents/search")
+
+    res =
+      Req.get(req,
+        params: [
+          q: "*",
+          filter_by: "photo_ids:#{id}"
+        ]
+      )
+
+    {:ok, notes} = Typesense.handle_search_res(res)
+
+    {:ok, %{photo: photo, notes: notes |> Enum.map(&Vmemo.PhotoService.TsNote.parse/1)}}
   end
 
   def update_photo(photo) do
@@ -58,7 +91,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
 
   def list_photos(opts \\ []) do
     user_id = Keyword.get(opts, :user_id, "")
-    req = Typesense.build_request("/collections/photos/documents/search")
+    req = Typesense.build_request("/collections/#{@collection_name}/documents/search")
 
     res =
       Req.get(req,
@@ -98,7 +131,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
             %{
               "query_by" => "note,image_embedding",
               "q" => q,
-              "collection" => "photos",
+              "collection" => @collection_name,
               "filter_by" => "inserted_by:#{user_id}",
               "vector_query" => "image_embedding:([], k: 200, distance_threshold: 0.79)",
               "exclude_fields" => "image_embedding",
@@ -124,7 +157,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
         json: %{
           "searches" => [
             %{
-              "collection" => "photos",
+              "collection" => @collection_name,
               "q" => "*",
               "vector_query" => "image_embedding:([], id:#{id})",
               "filter_by" => "inserted_by:#{user_id}",
@@ -137,47 +170,5 @@ defmodule Vmemo.PhotoService.TsPhoto do
     {:ok, photos} = Typesense.handle_multi_search_res(res)
 
     photos |> Enum.map(&parse/1)
-  end
-
-  def create_collection_photos_20241203() do
-    schema = %{
-      "name" => @collection_name,
-      "fields" => [
-        %{"name" => "image", "type" => "image", "store" => false},
-        %{"name" => "note", "type" => "string", "optional" => true},
-        %{"name" => "url", "type" => "string"},
-        %{"name" => "file_id", "type" => "string", "optional" => true},
-        %{"name" => "inserted_at", "type" => "int64"},
-        %{"name" => "inserted_by", "type" => "string"},
-        # embedding
-        %{
-          "name" => "image_embedding",
-          "type" => "float[]",
-          "embed" => %{
-            "from" => ["image"],
-            "model_config" => %{
-              "model_name" => "ts/clip-vit-b-p32"
-            }
-          }
-        }
-      ],
-      "default_sorting_field" => "inserted_at"
-    }
-
-    Typesense.create_collection(schema)
-  end
-
-  defp drop_collection_photos() do
-    Typesense.drop_collection(@collection_name)
-  end
-
-  def setup() do
-    res = create_collection_photos_20241203()
-    Logger.info("Collection created: #{inspect(res)}")
-  end
-
-  def reset() do
-    drop_collection_photos()
-    setup()
   end
 end

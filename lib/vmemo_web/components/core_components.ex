@@ -130,7 +130,7 @@ defmodule VmemoWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
+        "fixed bottom-2 left-2 ml-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
         @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
       ]}
@@ -219,9 +219,9 @@ defmodule VmemoWeb.CoreComponents do
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div class="mt-8 space-y-4 ">
         {render_slot(@inner_block, f)}
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <footer :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           {render_slot(action, f)}
-        </div>
+        </footer>
       </div>
     </.form>
     """
@@ -388,6 +388,46 @@ defmodule VmemoWeb.CoreComponents do
       />
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
+    """
+  end
+
+  attr :id, :string, required: true
+  attr :name, :string, required: true
+  attr :value, :string, default: nil
+
+  attr :label, :string, required: true
+  attr :errors, :list, default: []
+
+  attr :rest, :global
+
+  def textarea_field(assigns) do
+    ~H"""
+    <div class="grid w-full items-center gap-2">
+      <.label for={@id}>{@label}</.label>
+      <.textarea id={@id} name={@name} value={@value} />
+      <.error :for={msg <- @errors}>{msg}</.error>
+    </div>
+    """
+  end
+
+  attr :id, :string, required: true
+  attr :name, :string, required: true
+  attr :value, :string, default: nil
+  attr :class, :string, default: nil
+
+  attr :rest, :global
+
+  def textarea(assigns) do
+    ~H"""
+    <textarea
+      id={@id}
+      name={@name}
+      class={[
+        " textarea textarea-bordered min-h-[3lh] ",
+        @class
+      ]}
+      {@rest}
+    >{Phoenix.HTML.Form.normalize_value("textarea", @value)}</textarea>
     """
   end
 
@@ -736,6 +776,31 @@ defmodule VmemoWeb.CoreComponents do
         </.link>
       </div>
     </div>
+    """
+  end
+
+  attr :src, :string, required: true
+  attr :alt, :string, required: true
+  attr :note, :string, required: true
+
+  @doc """
+  Renders photo with note.
+  """
+  def photo_note(assigns) do
+    ~H"""
+    <figure class="max-w-md mx-auto  overflow-hidden ">
+      <img
+        src={@src}
+        alt={@alt}
+        class="w-full h-auto object-cover rounded-lg shadow hover:shadow-lg hover:transition-transform"
+      />
+      <figcaption class="py-2">
+        <p role="heading  font-bold">Note</p>
+        <p class="text-sm text-gray-600 mt-2">
+          {@note}
+        </p>
+      </figcaption>
+    </figure>
     """
   end
 end

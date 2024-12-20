@@ -1,28 +1,30 @@
 defmodule VmemoWeb.PhotoIdLive do
   require Logger
   use Gettext, backend: VmemoWeb.Gettext
+
   use VmemoWeb, :live_view
 
   alias Vmemo.PhotoService.TsPhoto
 
-  alias VmemoWeb.Live.Components.WaterfallLc
+  alias VmemoWeb.LiveComponents.Waterfall
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
     user_id = socket.assigns.current_user.id
-    photo = TsPhoto.get_photo(id)
+    {:ok, %{photo: photo, notes: notes}} = TsPhoto.get(id, :notes)
 
     if photo == nil do
-      {:ok, socket |> assign(photo: nil)}
+      {:ok, socket |> assign(photo: nil) |> assign(notes: [])}
     else
       photos = TsPhoto.list_similar_photos(photo.id, user_id: user_id)
 
       socket =
         socket
         |> assign(photo: photo)
+        |> assign(notes: notes)
         |> assign(show_expanded: false)
         |> assign(photos: photos)
-        |> assign_new(:note_form, fn ->
+        |> assign_new(:form, fn ->
           to_form(%{
             "note" => photo.note
           })
@@ -64,11 +66,11 @@ defmodule VmemoWeb.PhotoIdLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="w-full mx-auto max-w-screen-md p-4 sm:py-6">
+    <div class="p-4 sm:py-6">
       <%= if @photo == nil do %>
         <.not_found />
       <% else %>
-        <div class=" flex flex-col space-y-10 w-full mx-auto max-w-screen-md">
+        <div class=" flex flex-col space-y-10 w-full mx-auto max-w-screen-lg">
           <div class=" gap-4 space-y-4 sm:grid sm:grid-cols-2 sm:space-y-0 max-h-[60%] ">
             <div class="space-y-4 flex justify-center relative">
               <figure class="w-auto h-auto max-h-[60%] group">
@@ -119,28 +121,62 @@ defmodule VmemoWeb.PhotoIdLive do
               </figure>
             </div>
 
-            <.form class=" w-full flex flex-col gap-4 " for={@note_form} phx-submit="update_note">
-              <textarea
-                id={@note_form[:note].id}
-                name={@note_form[:note].name}
-                class="p-2 text-lg border border-gray-300 rounded shadow"
-              ><%= Phoenix.HTML.Form.normalize_value("textarea", @note_form[:note].value) %></textarea>
+            <.form class=" w-full flex flex-col gap-4 " for={@form} phx-submit="update_note">
+              <.textarea_field
+                id={@form[:note].id}
+                name={@form[:note].name}
+                value={@form[:note].value}
+                label="Note"
+              />
               <.button phx-disable-with="Updating">Update</.button>
             </.form>
           </div>
 
-          <div class=" space-y-2">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
-              Similar photos
-            </h2>
+          <div class=" space-y-2 grid gap-4 grid-cols-4">
+            <div class="space-y-2 col-span-2 sm:col-span-3">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
+                Similar photos({length(@photos)})
+              </h2>
 
-            <.live_component id="similar-photos" module={WaterfallLc} items={@photos}>
-              <:card :let={photo}>
-                <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
-                  <.img src={photo.url} alt={photo.note} />
+              <.live_component id="similar-photos" module={Waterfall} items={@photos}>
+                <:card :let={photo}>
+                  <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
+                    <.img src={photo.url} alt={photo.note} />
+                  </.link>
+                </:card>
+              </.live_component>
+            </div>
+
+            <div class="space-y-2">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
+                References({length(@notes)})
+              </h2>
+
+              <div class="space-y-2">
+                <.link
+                  :for={note <- @notes}
+                  navigate={~p"/notes/#{note.id}"}
+                  class="link link-hover block"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-4 inline-block"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                    />
+                  </svg>
+
+                  <span>{note.text}</span>
                 </.link>
-              </:card>
-            </.live_component>
+              </div>
+            </div>
           </div>
         </div>
 

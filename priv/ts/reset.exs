@@ -1,2 +1,6 @@
 # mix run priv/ts/reset.exs
-Vmemo.PhotoService.TsPhoto.reset()
+# Typesense setup is same as reset, and not need to seed data.
+
+alias Vmemo.Ts
+
+Ts.reset()

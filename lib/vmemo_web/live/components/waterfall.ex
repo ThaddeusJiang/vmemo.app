@@ -1,12 +1,11 @@
-defmodule VmemoWeb.Live.Components.WaterfallLc do
+defmodule VmemoWeb.LiveComponents.Waterfall do
   use VmemoWeb, :live_component
 
   @impl true
   def mount(socket) do
     {:ok,
      socket
-     |> assign(:col, 1)
-     |> assign(:items, [])}
+     |> assign(:col, 1)}
   end
 
   @impl true
@@ -28,9 +27,10 @@ defmodule VmemoWeb.Live.Components.WaterfallLc do
     |> Enum.map(fn {_key, group} -> Enum.map(group, &elem(&1, 0)) end)
   end
 
+  attr :items, :list, default: []
+  attr :class, :string, default: ""
   slot :card, required: true
   slot :empty, required: false
-  attr :class, :string, default: ""
 
   @impl true
   def render(assigns) do

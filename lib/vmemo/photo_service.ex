@@ -11,26 +11,4 @@ defmodule Vmemo.PhotoService do
 
     Path.join([Integer.to_string(user_id), "photos", timestamp <> "_" <> filename])
   end
-
-  @deprecated "Use Vmemo.TsPhoto.create/1 instead"
-  def create_ts_photo(
-        %{
-          image: image,
-          note: note,
-          note_ids: note_ids,
-          url: url,
-          inserted_by: inserted_by
-        } = _photo
-      ) do
-    inserted_at = DateTime.utc_now() |> DateTime.to_unix()
-
-    Vmemo.PhotoService.TsPhoto.create(%{
-      image: image,
-      note: note,
-      note_ids: note_ids,
-      url: url,
-      inserted_at: inserted_at,
-      inserted_by: inserted_by
-    })
-  end
 end

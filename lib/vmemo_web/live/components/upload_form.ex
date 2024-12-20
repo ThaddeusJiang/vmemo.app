@@ -12,7 +12,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
     {:ok,
      socket
      |> allow_upload(:photos,
-       accept: ~w(.png .jpg .jpeg .gif),
+       accept: ~w(.png .jpg .jpeg .gif .svg),
        max_entries: 100
      )}
   end
@@ -24,7 +24,8 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
      |> assign(assigns)
      |> assign_new(:form, fn ->
        to_form(%{
-         "note" => ""
+         "note" => "",
+         "is_whole" => false
        })
      end)}
   end
@@ -140,13 +141,15 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
         {error_to_string(err)}
       </p>
 
-      <div :if={Enum.count(@uploads.photos.entries) > 0} class="mt-4">
+      <div :if={Enum.count(@uploads.photos.entries) > 0} class="mt-4 space-y-2">
         <.textarea_field
           id={@form[:note].id}
           name={@form[:note].name}
           value={@form[:note].value}
           label="Note"
         />
+
+        <.input field={@form[:is_whole]} type="checkbox" label="Is whole" />
       </div>
 
       <footer :if={Enum.count(@uploads.photos.entries) > 0} class="flex justify-center mt-4">
@@ -173,16 +176,25 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
   @impl true
   def handle_event(
         "save",
-        %{"note" => note_text},
+        %{"note" => note_text, "is_whole" => is_whole},
         socket
       ) do
     user_id = socket.assigns.current_user.id
 
-    {:ok, note} =
-      TsNote.create(%{
-        text: note_text,
-        belongs_to: user_id |> Integer.to_string()
-      })
+    note =
+      case is_whole do
+        "true" ->
+          {:ok, note} =
+            TsNote.create(%{
+              text: note_text,
+              belongs_to: user_id |> Integer.to_string()
+            })
+
+          note
+
+        _ ->
+          nil
+      end
 
     case uploaded_entries(socket, :photos) do
       {[_ | _] = entries, []} ->
@@ -198,7 +210,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
                   TsPhoto.create(%{
                     image: read_image_base64(dest),
                     note: note_text,
-                    note_ids: [note.id],
+                    note_ids: (note != nil && [note.id]) || [],
                     url: Path.join("/", dest),
                     inserted_by: user_id |> Integer.to_string()
                   })
@@ -209,7 +221,9 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
             ts_photo
           end
 
-        TsNote.update_photo_ids(note.id, Enum.map(ts_photos, & &1.id))
+        if note != nil do
+          TsNote.update_photo_ids(note.id, Enum.map(ts_photos, & &1.id))
+        end
 
         {:noreply,
          socket

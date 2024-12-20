@@ -12,7 +12,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
     {:ok,
      socket
      |> allow_upload(:photos,
-       accept: ~w(.png .jpg .jpeg .gif .svg),
+       accept: ~w(.png .jpg .jpeg .gif .svg .webp),
        max_entries: 100
      )}
   end
@@ -76,7 +76,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
                   <% 100 -> %>
                     <div class="absolute inset-0 flex justify-center items-center backdrop-blur-sm ">
                       <div
-                        class=" radial-progress text-white dark:text-black"
+                        class=" radial-progress text-white"
                         style="--value:100; --size:2rem; --thickness: 2px;"
                         role="progressbar"
                       >
@@ -99,7 +99,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
                   <% _ -> %>
                     <div class="absolute inset-0 flex justify-center items-center backdrop-blur-sm ">
                       <div
-                        class=" radial-progress text-white dark:text-black"
+                        class=" radial-progress text-white "
                         style={"--value:#{entry.progress}; --size:2rem; --thickness: 2px;"}
                         role="progressbar"
                       >

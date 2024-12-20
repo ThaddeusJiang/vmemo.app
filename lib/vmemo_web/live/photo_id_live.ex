@@ -6,7 +6,7 @@ defmodule VmemoWeb.PhotoIdLive do
 
   alias Vmemo.PhotoService.TsPhoto
 
-  alias VmemoWeb.Live.Components.WaterfallLc
+  alias VmemoWeb.Live.Components.Waterfall
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
@@ -137,7 +137,7 @@ defmodule VmemoWeb.PhotoIdLive do
                 Similar photos({length(@photos)})
               </h2>
 
-              <.live_component id="similar-photos" module={WaterfallLc} items={@photos}>
+              <.live_component id="similar-photos" module={Waterfall} items={@photos}>
                 <:card :let={photo}>
                   <.link navigate={~p"/photos/#{photo.id}"} class="link link-hover block">
                     <.img src={photo.url} alt={photo.note} />

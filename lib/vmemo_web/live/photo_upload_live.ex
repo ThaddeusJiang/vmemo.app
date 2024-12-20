@@ -3,7 +3,7 @@ defmodule VmemoWeb.PhotoUploadLive do
 
   alias Vmemo.PhotoService
   alias Vmemo.PhotoService.TsNote
-  alias VmemoWeb.Live.Components.WaterfallLc
+  alias VmemoWeb.Live.Components.Waterfall
 
   @impl true
   def mount(_params, _session, socket) do
@@ -114,7 +114,7 @@ defmodule VmemoWeb.PhotoUploadLive do
           <section class=" aspect-auto sm:aspect-video relative flex flex-col w-full rounded-lg border bg-base-100 border-gray-300 p-4 text-center hover:border-gray-400 hover:bg-base-200 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ">
             <.live_component
               id="waterfall-upload-photos"
-              module={WaterfallLc}
+              module={Waterfall}
               items={@uploads.photos.entries}
             >
               <:empty>

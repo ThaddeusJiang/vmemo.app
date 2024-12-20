@@ -5,7 +5,7 @@ defmodule VmemoWeb.HomePageLive do
   alias Vmemo.PhotoService.TsPhoto
   alias Vmemo.PhotoService
 
-  alias VmemoWeb.Live.Components.WaterfallLc
+  alias VmemoWeb.Live.Components.Waterfall
 
   @impl true
   def mount(_params, _session, socket) do
@@ -144,7 +144,7 @@ defmodule VmemoWeb.HomePageLive do
         >
           <.live_component
             id="upload-photos-preview"
-            module={WaterfallLc}
+            module={Waterfall}
             items={@uploads.photos.entries}
           >
             <:card :let={entry}>
@@ -238,7 +238,7 @@ defmodule VmemoWeb.HomePageLive do
           <%!-- TODO: search when typing --%>
         </form>
 
-        <.live_component id="waterfall-photos" module={WaterfallLc} items={@photos}>
+        <.live_component id="waterfall-photos" module={Waterfall} items={@photos}>
           <:empty>
             <label
               for={@uploads.photos.ref}

@@ -41,7 +41,6 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
       phx-hook="ClipboardMediaFetcher"
       phx-drop-target={@uploads.photos.ref}
     >
-      <%!-- use phx-drop-target with the upload ref to enable file drag and drop --%>
       <label for={@uploads.photos.ref} class="relative h-auto">
         <section class=" aspect-auto sm:aspect-video relative flex flex-col w-full rounded-lg border bg-base-100 border-gray-300 p-4 text-center hover:border-gray-400 hover:bg-base-200 hover:shadow-inner hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ">
           <.live_component

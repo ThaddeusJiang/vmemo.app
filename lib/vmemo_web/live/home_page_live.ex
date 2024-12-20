@@ -5,7 +5,7 @@ defmodule VmemoWeb.HomePageLive do
   alias Vmemo.PhotoService.TsPhoto
   alias Vmemo.PhotoService
 
-  alias VmemoWeb.Live.Components.Waterfall
+  alias VmemoWeb.LiveComponents.Waterfall
 
   @impl true
   def mount(_params, _session, socket) do

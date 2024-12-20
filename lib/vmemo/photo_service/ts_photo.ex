@@ -29,8 +29,16 @@ defmodule Vmemo.PhotoService.TsPhoto do
     }
   end
 
-  def create_photo(photo) do
-    Typesense.create_document(@collection_name, photo)
+  def create(photo) do
+    now = DateTime.utc_now() |> DateTime.to_unix()
+
+    {:ok, document} =
+      Typesense.create_document(
+        @collection_name,
+        Map.put_new(photo, :inserted_at, now)
+      )
+
+    {:ok, parse(document)}
   end
 
   def get_photo(id) do

@@ -1,7 +1,7 @@
 defmodule VmemoWeb.LiveComponents.NoteUpdateForm do
   use VmemoWeb, :live_component
 
-  alias VmemoWeb.Live.Components.Waterfall
+  alias VmemoWeb.LiveComponents.Waterfall
 
   alias Vmemo.PhotoService.TsNote
 

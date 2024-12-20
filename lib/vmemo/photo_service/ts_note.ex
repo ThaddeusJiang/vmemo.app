@@ -27,12 +27,15 @@ defmodule Vmemo.PhotoService.TsNote do
       }) do
     now = :os.system_time(:millisecond)
 
-    Typesense.create_document(@collection_name, %{
-      text: text,
-      belongs_to: belongs_to,
-      inserted_at: now,
-      updated_at: now
-    })
+    {:ok, note} =
+      Typesense.create_document(@collection_name, %{
+        text: text,
+        belongs_to: belongs_to,
+        inserted_at: now,
+        updated_at: now
+      })
+
+    {:ok, parse(note)}
   end
 
   def get(id, :photos) do

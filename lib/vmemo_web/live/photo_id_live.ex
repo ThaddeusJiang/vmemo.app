@@ -6,7 +6,7 @@ defmodule VmemoWeb.PhotoIdLive do
 
   alias Vmemo.PhotoService.TsPhoto
 
-  alias VmemoWeb.Live.Components.Waterfall
+  alias VmemoWeb.LiveComponents.Waterfall
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do

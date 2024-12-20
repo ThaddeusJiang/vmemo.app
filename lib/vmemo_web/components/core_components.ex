@@ -40,8 +40,8 @@ defmodule VmemoWeb.CoreComponents do
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
-  slot :footer, required: false
-  slot :header, required: false
+  slot :footer
+  slot :header
 
   def modal(assigns) do
     ~H"""
@@ -77,22 +77,22 @@ defmodule VmemoWeb.CoreComponents do
               <.button
                 phx-click={JS.exec("data-cancel", to: "##{@id}")}
                 variant="ghost"
-                class="absolute btn-circle top-2 right-2 "
+                class="absolute btn-circle top-2 right-2 btn-xs "
                 aria-label={gettext("close")}
               >
-                <.icon name="hero-x-mark-solid" class="h-5 w-5" />
+                <.icon name="hero-x-mark-solid" class="h-4 w-4" />
               </.button>
 
-              <div id={"#{@id}-content"} class="h-full max-h-max flex flex-col gap-4">
+              <div id={"#{@id}-content"} class="h-full max-h-max flex flex-col">
                 <header class="flex-none">
                   {render_slot(@header)}
                 </header>
 
-                <div class="h-full overflow-y-auto max-h-max grow">
+                <div class="h-full overflow-y-auto max-h-max grow mt-4">
                   {render_slot(@inner_block)}
                 </div>
 
-                <footer class="flex justify-center gap-4 flex-none">
+                <footer :if={@footer} class="flex justify-center gap-4 flex-none mt-4">
                   {render_slot(@footer)}
                 </footer>
               </div>

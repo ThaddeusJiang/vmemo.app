@@ -66,17 +66,17 @@ defmodule VmemoWeb.PhotoIdLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="p-4 sm:py-6">
+    <div class="p-4 sm:py-6 lg:px-8">
       <%= if @photo == nil do %>
         <.not_found />
       <% else %>
         <div class=" flex flex-col space-y-10 w-full mx-auto max-w-screen-lg">
           <div class=" gap-4 space-y-4 sm:grid sm:grid-cols-2 sm:space-y-0 max-h-[60%] ">
             <div class="space-y-4 flex justify-center relative">
-              <figure class="w-auto h-auto max-h-[60%] group">
-                <%!-- <figcaption class="text-lg font-semibold text-gray-900 dark:text-gray-50">
-              <%= @photo.note %>
-            </figcaption> --%>
+              <figure class="w-auto h-auto group relative">
+                <%!-- <figcaption class="text-lg font-semibold text-gray-900">
+                  <%= @photo.note %>
+                </figcaption> --%>
 
                 <.img src={@photo.url} alt={@photo.note} />
                 <.button
@@ -132,9 +132,9 @@ defmodule VmemoWeb.PhotoIdLive do
             </.form>
           </div>
 
-          <div class=" space-y-2 grid gap-4 grid-cols-4">
-            <div class="space-y-2 col-span-2 sm:col-span-3">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
+          <div class="grid gap-4 grid-cols-4">
+            <div class="space-y-2 col-span-4 sm:col-span-3 lg:col-span-2">
+              <h2 class="text-lg font-semibold">
                 Similar photos({length(@photos)})
               </h2>
 
@@ -147,8 +147,8 @@ defmodule VmemoWeb.PhotoIdLive do
               </.live_component>
             </div>
 
-            <div class="space-y-2">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
+            <div class="space-y-2 col-span-4 sm:col-span-1 lg:col-span-2">
+              <h2 class="text-lg font-semibold ">
                 References({length(@notes)})
               </h2>
 

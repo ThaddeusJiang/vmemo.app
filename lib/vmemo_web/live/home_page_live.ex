@@ -48,7 +48,7 @@ defmodule VmemoWeb.HomePageLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <section class="p-4 sm:py-6 grow">
+    <section class="p-4 sm:py-6 lg:px-8 grow">
       <div class="flex flex-col gap-4 w-full max-w-screen-lg mx-auto">
         <form :if={@photos != []} action="/home" method="get">
           <input

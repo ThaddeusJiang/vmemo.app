@@ -77,8 +77,8 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="grow w-full container dropdown dropdown-open place-self-start">
-      <form :if={!@show_expanded} action="/home" method="get" class="form-control w-full container">
+    <div class="grow container max-w-md dropdown dropdown-open place-self-start">
+      <form :if={!@show_expanded} action="/home" method="get" class="form-control container">
         <label class="input input-bordered flex items-center gap-2 rounded-3xl">
           <input type="search" name="q" class=" grow" placeholder="Search" />
 
@@ -108,9 +108,9 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
 
       <div
         :if={@show_expanded}
-        class=" dropdown-content bg-base-100 z-10 shadow flex flex-col gap-2 relative border border-base-300 rounded-3xl p-4 sm:p-8 w-full container "
+        class=" dropdown-content bg-base-100 z-10 shadow flex flex-col gap-2 relative border border-base-300 rounded-3xl p-4 sm:p-8  container "
       >
-        <header class="w-full flex items-center justify-center ">
+        <header class="container flex items-center justify-center ">
           <p class="text-gray-500">Search any image</p>
           <.button
             variant="ghost"
@@ -134,7 +134,7 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
               <img src="/images/undraw_images.svg" alt="Upload photos" class="h-20 w-auto" />
             </div>
             <span class="text-xs text-gray-500 mt-4">
-              <span class="hidden sm:block">Drag an image here or</span>
+              <span class="hidden md:block">Drag an image here or</span>
               <span class="link link-hover link-info">upload a file</span>
             </span>
 

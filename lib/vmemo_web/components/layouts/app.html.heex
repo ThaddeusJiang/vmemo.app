@@ -5,7 +5,7 @@
         <%= if @current_user do %>
           <.link href="/home" class="flex gap-2 sm:gap-34 items-center font-bold ">
             <img src={~p"/images/logo.svg"} class="h-9 w-9 " />
-            <span class="hidden sm:block">Vmemo</span>
+            <span class="hidden md:block">Vmemo</span>
           </.link>
           <.live_component
             module={VmemoWeb.LiveComponents.SearchBox}

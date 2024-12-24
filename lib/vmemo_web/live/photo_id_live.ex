@@ -9,6 +9,33 @@ defmodule VmemoWeb.PhotoIdLive do
   alias VmemoWeb.LiveComponents.Waterfall
 
   @impl true
+  def mount(%{"id" => id, "action" => action}, _session, socket) do
+    user_id = socket.assigns.current_user.id
+    {:ok, %{photo: photo, notes: notes}} = TsPhoto.get(id, :notes)
+
+    if photo == nil do
+      {:ok, socket |> assign(photo: nil) |> assign(notes: [])}
+    else
+      photos = TsPhoto.list_similar_photos(photo.id, user_id: user_id)
+
+      socket =
+        socket
+        |> assign(photo: photo)
+        |> assign(notes: notes)
+        |> assign(show_expanded: false)
+        |> assign(photos: photos)
+        |> assign_new(:form, fn ->
+          to_form(%{
+            "note" => photo.note
+          })
+        end)
+        |> assign(:action, action)
+
+      {:ok, socket}
+    end
+  end
+
+  @impl true
   def mount(%{"id" => id}, _session, socket) do
     user_id = socket.assigns.current_user.id
     {:ok, %{photo: photo, notes: notes}} = TsPhoto.get(id, :notes)
@@ -29,6 +56,7 @@ defmodule VmemoWeb.PhotoIdLive do
             "note" => photo.note
           })
         end)
+        |> assign(:action, "edit")
 
       {:ok, socket}
     end
@@ -121,7 +149,18 @@ defmodule VmemoWeb.PhotoIdLive do
               </figure>
             </div>
 
-            <.form class=" w-full flex flex-col gap-4 " for={@form} phx-submit="update_note">
+            <.form
+              class={[
+                " w-full flex flex-col gap-4 ",
+                if @action == "edit" do
+                  "block"
+                else
+                  "hidden"
+                end
+              ]}
+              for={@form}
+              phx-submit="update_note"
+            >
               <.textarea_field
                 id={@form[:note].id}
                 name={@form[:note].name}

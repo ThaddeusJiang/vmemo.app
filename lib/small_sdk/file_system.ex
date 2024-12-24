@@ -17,4 +17,8 @@ defmodule SmallSdk.FileSystem do
 
     dest
   end
+
+  def read_image_base64(file_path) do
+    File.read!(file_path) |> Base.encode64()
+  end
 end

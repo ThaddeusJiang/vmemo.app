@@ -111,7 +111,7 @@ defmodule Vmemo.PhotoService.TsPhoto do
     photos
   end
 
-  def hybird_search_photos(q, opts \\ []) do
+  def hybird_search_photos({q, similar}, opts \\ []) do
     user_id = Keyword.get(opts, :user_id, "")
     page = Keyword.get(opts, :page, 1)
     per_page = 10
@@ -120,6 +120,12 @@ defmodule Vmemo.PhotoService.TsPhoto do
       case String.trim(q) do
         "" -> "*"
         q -> q
+      end
+
+    vector_query =
+      case similar do
+        nil -> "image_embedding:([], k: 200, distance_threshold: 0.79)"
+        _ -> "image_embedding:([], k: 200, distance_threshold: 0.79, id:#{similar})"
       end
 
     req = Typesense.build_request("/multi_search")
@@ -131,9 +137,9 @@ defmodule Vmemo.PhotoService.TsPhoto do
             %{
               "query_by" => "note,image_embedding",
               "q" => q,
+              "vector_query" => vector_query,
               "collection" => @collection_name,
               "filter_by" => "inserted_by:#{user_id}",
-              "vector_query" => "image_embedding:([], k: 200, distance_threshold: 0.79)",
               "exclude_fields" => "image_embedding",
               "sort_by" => "_text_match:desc,inserted_at:desc",
               "per_page" => per_page,

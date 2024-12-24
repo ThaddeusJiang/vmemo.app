@@ -14,7 +14,10 @@ defmodule VmemoWeb.PhotoIdLive do
     {:ok, %{photo: photo, notes: notes}} = TsPhoto.get(id, :notes)
 
     if photo == nil do
-      {:ok, socket |> assign(photo: nil) |> assign(notes: [])}
+      {:ok,
+       socket
+       |> assign(photo: nil)
+       |> assign(notes: [])}
     else
       photos = TsPhoto.list_similar_photos(photo.id, user_id: user_id)
 

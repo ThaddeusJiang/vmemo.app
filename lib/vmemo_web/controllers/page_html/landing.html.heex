@@ -1,24 +1,10 @@
 <main class="flex flex-col min-h-screen">
   <header class="px-4 lg:px-8 flex-none">
-    <div class="flex items-center justify-between border-b border-base-300 py-3 text-sm">
+    <div class="flex items-center justify-between border-b border-base-300 py-3 text-sm gap-4">
       <div class="flex items-center gap-4">
         <%= if @current_user do %>
           <.link href="/home" class="flex gap-4 items-center font-bold">
             <img src={~p"/images/logo.svg"} class="h-9" /> Vmemo
-          </.link>
-          <.link href="/upload" class="btn btn-accent btn-square">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="size-6"
-              aria-hidden="true"
-              aria-label="Upload"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
           </.link>
         <% else %>
           <a href="/" class="flex gap-4 items-center font-bold">
@@ -79,7 +65,7 @@
             </p>
             <div class="mt-12 flex flex-row gap-x-6 gap-y-4 ">
               <a
-                class="btn btn-accent !btn-md rounded-full"
+                class="btn btn-accent rounded-3xl"
                 data-headlessui-state=""
                 href="/users/register"
               >

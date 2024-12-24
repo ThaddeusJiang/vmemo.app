@@ -253,7 +253,7 @@ defmodule VmemoWeb.CoreComponents do
         "phx-submit-loading:opacity-75 ",
         "btn",
         @variant == "submit" && "btn-accent",
-        @variant == "ghost" && "btn-ghost",
+        @variant == "ghost" && "btn-ghost ",
         @variant == "danger" && "btn-error",
         @variant == "outline" && "btn-outline bg-base-100 text-base-content",
         @class

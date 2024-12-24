@@ -6,6 +6,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
   alias Vmemo.PhotoService
   alias Vmemo.PhotoService.TsNote
   alias Vmemo.PhotoService.TsPhoto
+  alias SmallSdk.FileSystem
 
   @impl true
   def mount(socket) do
@@ -126,7 +127,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
 
           <label
             for={@uploads.photos.ref}
-            class="block flex-none py-[2px] rounded-full place-content-center  hover:cursor-pointer"
+            class="block flex-none py-[2px] rounded-3xl place-content-center  hover:cursor-pointer"
           >
             <span class="text-xs text-gray-500">
               Drag and drop images here or click to upload
@@ -208,7 +209,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
 
                 {:ok, ts_photo} =
                   TsPhoto.create(%{
-                    image: read_image_base64(dest),
+                    image: FileSystem.read_image_base64(dest),
                     note: note_text,
                     note_ids: (note != nil && [note.id]) || [],
                     url: Path.join("/", dest),
@@ -233,9 +234,5 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
       _ ->
         {:noreply, socket}
     end
-  end
-
-  def read_image_base64(file_path) do
-    File.read!(file_path) |> Base.encode64()
   end
 end

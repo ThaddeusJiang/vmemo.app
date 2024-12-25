@@ -40,4 +40,13 @@
         width: 1.5rem;
         min-height: 1.5rem;
     }
+
+    .input:focus {
+        outline: none;
+    }
+
+    .input input, .input input:focus {
+        border: none;
+        box-shadow: none;
+    }
 }

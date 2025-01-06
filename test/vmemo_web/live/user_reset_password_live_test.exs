@@ -88,16 +88,16 @@ defmodule VmemoWeb.UserResetPasswordLiveTest do
   end
 
   describe "Reset password navigation" do
-    test "redirects to login page when the Log in button is clicked", %{conn: conn, token: token} do
+    test "redirects to login page when the Sign in button is clicked", %{conn: conn, token: token} do
       {:ok, lv, _html} = live(conn, ~p"/users/reset_password/#{token}")
 
       {:ok, conn} =
         lv
-        |> element(~s|main a:fl-contains("Log in")|)
+        |> element(~s|main a:fl-contains("Sign in")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
-      assert conn.resp_body =~ "Log in"
+      assert conn.resp_body =~ "Sign in"
     end
 
     test "redirects to registration page when the Register button is clicked", %{

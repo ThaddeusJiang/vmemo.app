@@ -17,7 +17,7 @@ defmodule VmemoWeb.UserConfirmationLive do
 
       <p class="text-center mt-4">
         <.link href={~p"/users/register"}>Register</.link>
-        | <.link href={~p"/users/log_in"}>Log in</.link>
+        | <.link href={~p"/users/log_in"}>Sign in</.link>
       </p>
     </div>
     """
@@ -28,7 +28,7 @@ defmodule VmemoWeb.UserConfirmationLive do
     {:ok, assign(socket, form: form), temporary_assigns: [form: nil]}
   end
 
-  # Do not log in the user after confirmation to avoid a
+  # Do not sign in the user after confirmation to avoid a
   # leaked token giving the user access to the account.
   def handle_event("confirm_account", %{"user" => %{"token" => token}}, socket) do
     case Account.confirm_user(token) do

@@ -423,7 +423,7 @@ defmodule VmemoWeb.CoreComponents do
       id={@id}
       name={@name}
       class={[
-        " textarea textarea-bordered min-h-[3lh] ",
+        " textarea textarea-bordered",
         @class
       ]}
       {@rest}

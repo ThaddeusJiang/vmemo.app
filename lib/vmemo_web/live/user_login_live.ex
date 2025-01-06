@@ -5,7 +5,7 @@ defmodule VmemoWeb.UserLoginLive do
     ~H"""
     <div class="mx-auto w-full max-w-md p-4 sm:py-6 lg:px-8">
       <.header class="text-center">
-        Log in to account
+        Sign in to account
         <:subtitle>
           Don't have an account?
           <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
@@ -27,7 +27,7 @@ defmodule VmemoWeb.UserLoginLive do
         </:actions>
         <:actions>
           <.button phx-disable-with="Logging in..." class="w-full">
-            Log in <span aria-hidden="true">→</span>
+            Sign in <span aria-hidden="true">→</span>
           </.button>
         </:actions>
       </.simple_form>

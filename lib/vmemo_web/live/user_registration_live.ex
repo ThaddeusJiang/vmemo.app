@@ -12,7 +12,7 @@ defmodule VmemoWeb.UserRegistrationLive do
         <:subtitle>
           Already registered?
           <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
-            Log in
+            Sign in
           </.link>
           to your account now.
         </:subtitle>

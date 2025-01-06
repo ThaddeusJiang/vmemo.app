@@ -38,6 +38,7 @@ defmodule Vmemo.PhotoService.TsNote do
     {:ok, parse(note)}
   end
 
+  # TODO: renaming to read?
   def get(id, :photos) do
     {:ok, note} = Typesense.get_document(@collection_name, id)
 
@@ -63,6 +64,7 @@ defmodule Vmemo.PhotoService.TsNote do
     {:ok, %{note: note, photos: photos |> Enum.map(&Vmemo.PhotoService.TsPhoto.parse/1)}}
   end
 
+  # TODO: renaming to read?
   def get(id) do
     {:ok, note} = Typesense.get_document(@collection_name, id)
 
@@ -81,5 +83,9 @@ defmodule Vmemo.PhotoService.TsNote do
       id: id,
       photo_ids: photo_ids
     })
+  end
+
+  def delete(id) do
+    Typesense.delete_document(@collection_name, id)
   end
 end

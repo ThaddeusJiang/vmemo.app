@@ -11,7 +11,7 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
      socket
      |> assign(show_expanded: false)
      |> allow_upload(:photo,
-       accept: ~w(.png .jpg .jpeg .gif .svg .webp),
+       accept: ~w(.png .jpg .jpeg .gif .webp),
        progress: &handle_progress/3,
        auto_upload: true,
        max_entries: 1
@@ -79,10 +79,10 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
     ~H"""
     <div class="grow container max-w-md dropdown dropdown-open place-self-start">
       <form :if={!@show_expanded} action="/home" method="get" class="form-control container">
-        <label class="input input-bordered flex items-center gap-2 rounded-3xl">
+        <label class="input input-bordered flex items-center rounded-3xl">
           <input type="search" name="q" class=" grow" placeholder="Search" />
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -138,7 +138,7 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
               <span class="link link-hover link-info">upload a file</span>
             </span>
 
-            <.live_file_input upload={@uploads.photo} accept="image/*" class="hidden" />
+            <.live_file_input upload={@uploads.photo} class="hidden" />
           </label>
         </form>
       </div>

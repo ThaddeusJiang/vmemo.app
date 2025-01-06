@@ -234,7 +234,7 @@ defmodule VmemoWeb.UserAuthTest do
       assert redirected_to(conn) == ~p"/users/log_in"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
-               "You must log in to access this page."
+               "You must sign in to access this page."
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do

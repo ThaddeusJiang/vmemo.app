@@ -12,6 +12,10 @@
 
         width: 100%;
     }
+
+    input:focus {
+        outline: none;
+    }
 }
 
 @layer components {
@@ -41,12 +45,32 @@
         min-height: 1.5rem;
     }
 
-    .input:focus {
+    .input {
+        height: auto;
+    }
+
+    .input input,
+    .input input:focus {
+        border: none;
+        box-shadow: none;
         outline: none;
     }
 
-    .input input, .input input:focus {
-        border: none;
+    .input:focus,
+    .input:focus-within {
         box-shadow: none;
+        outline: none;
+    }
+
+    .textarea {
+        font-size: 1rem;
+    }
+
+    .textarea {
+        min-height: 3lh;
+    }
+
+    .textarea:focus {
+        outline: none;
     }
 }

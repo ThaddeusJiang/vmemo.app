@@ -13,7 +13,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
     {:ok,
      socket
      |> allow_upload(:photos,
-       accept: ~w(.png .jpg .jpeg .gif .svg .webp),
+       accept: ~w(.png .jpg .jpeg .gif .webp),
        max_entries: 100
      )}
   end
@@ -134,7 +134,7 @@ defmodule VmemoWeb.LiveComponents.UploadForm do
             </span>
           </label>
 
-          <.live_file_input upload={@uploads.photos} accept="image/*" class="hidden" />
+          <.live_file_input upload={@uploads.photos} class="hidden" />
         </section>
       </label>
 

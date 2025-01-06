@@ -17,7 +17,7 @@ defmodule VmemoWeb.HomePageLive do
      |> assign(:search_by_photo, nil)
      |> assign(show_expanded: false)
      |> allow_upload(:photo,
-       accept: ~w(.png .jpg .jpeg .gif .svg .webp),
+       accept: ~w(.png .jpg .jpeg .gif .webp),
        progress: &handle_progress/3,
        auto_upload: true,
        max_entries: 1

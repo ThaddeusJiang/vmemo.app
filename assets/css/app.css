@@ -45,19 +45,29 @@
         min-height: 1.5rem;
     }
 
-    .input input, .input input:focus {
+    .input {
+        height: auto;
+    }
+
+    .input input,
+    .input input:focus {
         border: none;
         box-shadow: none;
         outline: none;
     }
 
-    .input:focus, .input:focus-within {
+    .input:focus,
+    .input:focus-within {
         box-shadow: none;
         outline: none;
     }
 
-    .textarea, .input {
+    .textarea {
         font-size: 1rem;
+    }
+
+    .textarea {
+        min-height: 3lh;
     }
 
     .textarea:focus {

@@ -43,8 +43,18 @@ defmodule VmemoWeb.LiveComponents.NoteUpdateForm do
         {@note.inserted_at}
       </div>
 
-      <div>
+      <div class="flex items-center justify-between">
         <.button>Save</.button>
+        <.button
+          type="button"
+          variant="danger"
+          data-confirm="You can't undo this action. Are you sure?"
+          phx-click="delete_note"
+          phx-value-id={@note.id}
+          phx-target={@myself}
+        >
+          Delete
+        </.button>
       </div>
     </form>
     """
@@ -63,5 +73,12 @@ defmodule VmemoWeb.LiveComponents.NoteUpdateForm do
     })
 
     {:noreply, socket |> put_flash(:info, "Updated") |> push_patch(to: socket.assigns.patch)}
+  end
+
+  @impl true
+  def handle_event("delete_note", %{"id" => id}, socket) do
+    TsNote.delete(id)
+
+    {:noreply, socket |> put_flash(:info, "Deleted") |> push_navigate(to: ~p"/home")}
   end
 end

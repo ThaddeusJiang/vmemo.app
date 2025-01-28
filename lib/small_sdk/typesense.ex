@@ -1,6 +1,8 @@
 defmodule SmallSdk.Typesense do
   require Logger
 
+  alias SmallSdk.Utils
+
   ###
   # Collections start
   ###
@@ -208,20 +210,10 @@ defmodule SmallSdk.Typesense do
   end
 
   defp get_env() do
-    url = Application.fetch_env!(:vmemo, :typesense_url) |> validate_url!()
+    url = Application.fetch_env!(:vmemo, :typesense_url) |> Utils.validate_url!()
 
     api_key = Application.fetch_env!(:vmemo, :typesense_api_key)
 
     {url, api_key}
-  end
-
-  defp validate_url!(url) do
-    uri = URI.parse(url)
-
-    if uri.scheme in ["http", "https"] and uri.host do
-      url
-    else
-      raise ArgumentError, "Invalid URL: #{url}"
-    end
   end
 end

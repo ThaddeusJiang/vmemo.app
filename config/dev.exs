@@ -14,6 +14,9 @@ config :vmemo, Vmemo.Repo,
 config :vmemo, typesense_url: "http://localhost:8765"
 config :vmemo, typesense_api_key: "xyz"
 
+config :vmemo, ollama_url: "http://localhost:11434"
+config :vmemo, ollama_api_key: "local"
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

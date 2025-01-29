@@ -17,7 +17,7 @@ defmodule VmemoWeb.UserSettingsLive do
           <.simple_form
             for={@display_name_form}
             id="display_name_form"
-            phx-submit="update_dispaly_name"
+            phx-submit="update_display_name"
             phx-change="validate_display_name"
           >
             <.input field={@display_name_form[:display_name]} label="Display Name" />
@@ -195,7 +195,7 @@ defmodule VmemoWeb.UserSettingsLive do
   end
 
   # update display_name
-  def handle_event("update_dispaly_name", params, socket) do
+  def handle_event("update_display_name", params, socket) do
     user = socket.assigns.current_user
 
     case Account.update_user_display_name(user, params["user"]) do

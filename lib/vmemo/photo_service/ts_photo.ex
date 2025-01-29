@@ -104,6 +104,10 @@ defmodule Vmemo.PhotoService.TsPhoto do
     })
   end
 
+  def update(id, photo) do
+    update_photo(Map.merge(photo, %{id: id}))
+  end
+
   def update_ocr(id, ocr) do
     update_photo(%{
       id: id,

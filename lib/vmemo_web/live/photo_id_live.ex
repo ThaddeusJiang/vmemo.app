@@ -29,7 +29,8 @@ defmodule VmemoWeb.PhotoIdLive do
         |> assign(photos: photos)
         |> assign_new(:form, fn ->
           to_form(%{
-            "note" => photo.note
+            "note" => photo.note,
+            "_gen_description" => photo._gen_description
           })
         end)
         |> assign(:action, action)
@@ -56,7 +57,8 @@ defmodule VmemoWeb.PhotoIdLive do
         |> assign(photos: photos)
         |> assign_new(:form, fn ->
           to_form(%{
-            "note" => photo.note
+            "note" => photo.note,
+            "_gen_description" => photo._gen_description
           })
         end)
         |> assign(:action, "edit")
@@ -76,22 +78,26 @@ defmodule VmemoWeb.PhotoIdLive do
   end
 
   @impl true
-  def handle_event("update_note", %{"note" => note}, socket) do
-    {:ok, _} = TsPhoto.update_note(socket.assigns.photo.id, note)
+  def handle_event("save", %{"note" => note, "_gen_description" => gen_description}, socket) do
+    {:ok, _} =
+      TsPhoto.update(socket.assigns.photo.id, %{note: note, _gen_description: gen_description})
 
     {:noreply,
      socket
-     |> put_flash(:info, "Updated")}
+     |> put_flash(:info, "Saved")}
   end
 
   @impl true
   def handle_event("gen_description", _, socket) do
-    # TODO: handling error, change ui when error
-    {:ok, _} = TsPhoto.gen_description(socket.assigns.photo.id)
+    case TsPhoto.gen_description(socket.assigns.photo.id) do
+      {:ok, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Description generated")}
 
-    {:noreply,
-     socket
-     |> put_flash(:info, "Description generated")}
+      {:error, reason} ->
+        {:noreply, socket |> put_flash(:error, "Failed to generate description: #{reason}")}
+    end
   end
 
   @impl true
@@ -249,7 +255,7 @@ defmodule VmemoWeb.PhotoIdLive do
                 end
               ]}
               for={@form}
-              phx-submit="update_note"
+              phx-submit="save"
             >
               <.textarea_field
                 id={@form[:note].id}
@@ -257,7 +263,15 @@ defmodule VmemoWeb.PhotoIdLive do
                 value={@form[:note].value}
                 label="Note"
               />
-              <.button phx-disable-with="Updating">Update</.button>
+
+              <.textarea_field
+                id={@form[:_gen_description].id}
+                name={@form[:_gen_description].name}
+                value={@form[:_gen_description].value}
+                label="Description"
+              />
+
+              <.button phx-disable-with="Saving">Save</.button>
             </.form>
           </div>
 

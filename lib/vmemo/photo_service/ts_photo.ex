@@ -8,9 +8,22 @@ defmodule Vmemo.PhotoService.TsPhoto do
   require Logger
   alias SmallSdk.Typesense
 
+  alias Vmemo.PhotoService.Ai
+
   @collection_name "photos"
 
-  defstruct [:id, :image, :note, :note_ids, :url, :file_id, :inserted_at, :inserted_by]
+  defstruct [
+    :id,
+    :image,
+    :note,
+    :note_ids,
+    :url,
+    :file_id,
+    :inserted_at,
+    :inserted_by,
+    :_gen_description,
+    :_gen_ocr
+  ]
 
   def parse(nil) do
     nil
@@ -25,7 +38,9 @@ defmodule Vmemo.PhotoService.TsPhoto do
       url: photo["url"],
       file_id: photo["file_id"],
       inserted_at: photo["inserted_at"],
-      inserted_by: photo["inserted_by"]
+      inserted_by: photo["inserted_by"],
+      _gen_description: photo["_gen_description"],
+      _gen_ocr: photo["_gen_ocr"]
     }
   end
 
@@ -87,6 +102,30 @@ defmodule Vmemo.PhotoService.TsPhoto do
       id: id,
       note: note
     })
+  end
+
+  def update(id, photo) do
+    update_photo(Map.merge(photo, %{id: id}))
+  end
+
+  def update_ocr(id, ocr) do
+    update_photo(%{
+      id: id,
+      _gen_ocr: ocr
+    })
+  end
+
+  def update_description(id, description) do
+    update_photo(%{
+      id: id,
+      _gen_description: description
+    })
+  end
+
+  def gen_description(id) do
+    photo = get_photo(id)
+    {:ok, description} = Ai.gen_description(photo.url)
+    update_description(id, description)
   end
 
   def list_photos(opts \\ []) do

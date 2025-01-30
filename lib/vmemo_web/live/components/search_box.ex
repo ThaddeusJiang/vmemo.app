@@ -10,6 +10,7 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
     {:ok,
      socket
      |> assign(show_expanded: false)
+     |> assign(:q, "")
      |> allow_upload(:photo,
        accept: ~w(.png .jpg .jpeg .gif .webp),
        progress: &handle_progress/3,
@@ -20,9 +21,12 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
 
   @impl true
   def update(assigns, socket) do
+    q = Map.get(assigns, :q, "")
+
     {:ok,
      socket
-     |> assign(assigns)}
+     |> assign(assigns)
+     |> assign(:q, q)}
   end
 
   @impl true
@@ -80,7 +84,7 @@ defmodule VmemoWeb.LiveComponents.SearchBox do
     <div class="grow container max-w-md dropdown dropdown-open place-self-start">
       <form :if={!@show_expanded} action="/home" method="get" class="form-control container">
         <label class="input input-bordered flex items-center rounded-3xl">
-          <input type="search" name="q" class=" grow" placeholder="Search" />
+          <input type="search" name="q" class=" grow" placeholder="Search" value={@q} />
 
           <div class="flex items-center">
             <svg

@@ -14,38 +14,11 @@
       </div>
 
       <ul class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-        <%= if @current_user do %>
-          <div class="avatar placeholder online">
-            <div class="bg-accent text-accent-content w-8 rounded-full">
-              <span>
-                {String.at(@current_user.display_name || @current_user.email, 0)}
-              </span>
-            </div>
-          </div>
-          <li>
-            <.link
-              href={~p"/users/settings"}
-              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-            >
-              Settings
-            </.link>
-          </li>
-          <li>
-            <.link
-              href={~p"/users/log_out"}
-              method="delete"
-              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-            >
-              Sign Up
-            </.link>
-          </li>
-        <% else %>
-          <li>
-            <a class="btn btn-accent rounded-full" data-headlessui-state="" href="/users/log_in">
-              Get started
-            </a>
-          </li>
-        <% end %>
+        <li>
+          <a data-headlessui-state="" href="/users/log_in" class="btn btn-accent rounded-full">
+            Get started
+          </a>
+        </li>
       </ul>
     </div>
   </header>

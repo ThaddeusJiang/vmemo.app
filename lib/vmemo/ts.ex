@@ -61,11 +61,26 @@ defmodule Vmemo.Ts do
     Typesense.update_collection("photos", photos_schema)
   end
 
+  @doc """
+  add photos.ocr
+  """
+  def change_3() do
+    schema = %{
+      "fields" => [
+        %{"name" => "_gen_ocr", "type" => "string", "optional" => true},
+        %{"name" => "_gen_description", "type" => "string", "optional" => true}
+      ]
+    }
+
+    Typesense.update_collection("photos", schema)
+  end
+
   def reset do
     Typesense.drop_collection("photos")
     Typesense.drop_collection("notes")
 
     change_1()
     change_2()
+    change_3()
   end
 end

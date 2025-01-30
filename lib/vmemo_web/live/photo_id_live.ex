@@ -119,7 +119,7 @@ defmodule VmemoWeb.PhotoIdLive do
       <% else %>
         <div class=" flex flex-col space-y-10 w-full mx-auto max-w-screen-lg">
           <div class=" gap-4 space-y-4 sm:grid sm:grid-cols-2 sm:space-y-0 max-h-[60%] ">
-            <div class="space-y-4 flex justify-center relative">
+            <div class="space-y-4 flex flex-col justify-center relative">
               <figure class="w-auto h-auto group relative">
                 <%!-- <figcaption class="text-lg font-semibold text-gray-900">
                   <%= @photo.note %>
@@ -243,6 +243,8 @@ defmodule VmemoWeb.PhotoIdLive do
                   </svg>
                 </.button>
               </figure>
+
+              <div class="grow" />
             </div>
 
             <.form
@@ -316,7 +318,7 @@ defmodule VmemoWeb.PhotoIdLive do
                     />
                   </svg>
 
-                  <span>{note.text}</span>
+                  <span>{note.text |> String.split("\n") |> hd()}</span>
                 </.link>
               </div>
             </div>

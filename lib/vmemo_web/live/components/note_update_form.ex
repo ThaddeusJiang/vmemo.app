@@ -39,10 +39,6 @@ defmodule VmemoWeb.LiveComponents.NoteUpdateForm do
         />
       </div>
 
-      <div class="text-sm text-gray-500">
-        {@note.inserted_at}
-      </div>
-
       <div class="flex items-center justify-between">
         <.button>Save</.button>
         <.button

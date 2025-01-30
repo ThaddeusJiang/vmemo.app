@@ -9,8 +9,9 @@
     textarea {
         field-sizing: content;
         min-height: 3lh;
+        height: 3lh;
 
-        width: 100%;
+        @apply px-3 py-2 w-full;
     }
 
     input:focus {
@@ -68,10 +69,10 @@
 
     .textarea {
         font-size: 1rem;
-    }
-
-    .textarea {
         min-height: 3lh;
+        height: 3lh;
+
+        @apply px-3 py-2 w-full;
     }
 
     .textarea:focus {
